@@ -58,25 +58,23 @@ nav.menu {
 /* ================== Détails ==================== */
 /* =============================================== */
 
-figure {
+a#image-lightbox figure#thumbnail {
+    width: 500px;
     margin: 20px 0 !important;
 }
 
-figure#thumbnail {
+a#image-lightbox figure#thumbnail img {
     width: 500px;
 }
 
-figure#thumbnail img {
+a#image-lightbox figure#thumbnail figcaption {
     width: 500px;
-}
-
-figure#thumbnail figcaption {
     color: white;
     background-color: black;
     font-weight: bold;
     padding: 15px;
-    position: relative;
-    top: -53px;
+    position: absolute;
+    top: 370px;
     opacity: 0.7;
 }
 
@@ -90,6 +88,18 @@ figure#thumbnail figcaption {
 
 #flickr-response {
     margin-top: 20px
+}
+
+/* =============================================== */
+/* ==================== Carte ==================== */
+/* =============================================== */
+
+#map {
+    height: 500px;
+}
+
+#map img {
+    width: 150px;
 }
 
 /* =============================================== */

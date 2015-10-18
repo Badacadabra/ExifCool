@@ -1,16 +1,25 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" prefix="og: http://ogp.me/ns#">
     <head>
         <meta charset="UTF-8">
         <title>Upload</title>
         <meta name="description" content="Une galerie d'images pour le module UMDN3C">
         <meta name="author" content="Macky Dieng, Baptiste Vannesson">
+        <meta property="og:title" content="Ajout d'images à la galerie">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="http://www.domain.com">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:site" content="@Badacadabra">
+        <meta name="twitter:creator" content="@dieng445">
+        <meta name="twitter:title" content="Ajout d'images à la galerie">
+        <meta name="twitter:description" content="Une galerie d'images pour le module UMDN3C">
+        <meta name="twitter:image" content="http://www.domaine.com/ui/images/photographer.jpg">
         <link rel="icon" type="image/png" href="../images/favicon.png">
         <link rel="stylesheet" href="../css/style.css" media="all">
         <link rel="stylesheet" href="semantic/dist/semantic.min.css">
         <link rel="stylesheet" href="../css/jquery.mCustomScrollbar.min.css">
     </head>
-    <body>
+    <body itemscope itemtype="http://schema.org/WebPage">
         <nav class="ui labeled icon fixed inverted menu">
             <a class="item" href="index.html">
                 <i class="home icon"></i>
@@ -65,7 +74,7 @@
                         </button>
                     </div>
                     <div id="selected-image">
-                        <img src="../images/default_image.png" alt="">
+                        <img src="../images/default_image.png" alt="" itemprop="primaryImageOfPage">
                     </div>
                 </div>
             </form>
