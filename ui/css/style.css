@@ -16,9 +16,13 @@
 /* ==================== Global =================== */
 /* =============================================== */
 
+body {
+    background-image: url('../images/photographer.jpg') !important;
+}
+
 section {
-    width: 90%;
-    margin-top: 100px !important;
+    width: 75%;
+    margin-top: 130px !important;
     margin-left: auto !important;
     margin-right: auto !important;
 }
@@ -40,19 +44,53 @@ nav.menu {
     margin-right: 0;
 }
 
+.segment {
+    padding: 30px !important;
+}
+
 /* =============================================== */
 /* ================== Accueil ==================== */
 /* =============================================== */
 
-img {
-    height: 250px;
-}
+
 
 /* =============================================== */
 /* ================== Détails ==================== */
 /* =============================================== */
 
+figure {
+    margin: 20px 0 !important;
+}
 
+figure#thumbnail {
+    width: 500px;
+}
+
+figure#thumbnail img {
+    width: 500px;
+}
+
+figure#thumbnail figcaption {
+    color: white;
+    background-color: black;
+    font-weight: bold;
+    padding: 15px;
+    position: relative;
+    top: -53px;
+    opacity: 0.7;
+}
+
+#flickr input {
+    border-radius: 0.29em 0 0 0.29em !important;
+}
+
+#flickr button {
+    border-radius: 0 0.29em 0.29em 0 !important;
+}
+
+#flickr-response {
+    margin-top: 20px
+}
 
 /* =============================================== */
 /* =================== Upload ==================== */
@@ -62,7 +100,42 @@ img {
     margin-bottom: 15px !important;
 }
 
+#file {
+    display: none !important;
+}
+
+#upload-wrapper {
+    display: flex !important;
+}
+
+#form-wrapper {
+    display: none;
+    max-width: 45%;
+}
+
+#form-wrapper .ui.huge.input {
+    display: block;
+    margin: 15px 0;
+}
+
+#selected-image {
+    max-width: 45%;
+}
+
+#selected-image img {
+    width: 500px;
+}
+
 /* =============================================== */
 /* ================== À propos =================== */
 /* =============================================== */
 
+.message {
+    font-size: 17px !important;
+    text-align: center;
+    margin-bottom: 20px !important;
+}
+
+.cards {
+    margin-top: 20px !important;
+}
