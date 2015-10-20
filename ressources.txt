@@ -1,0 +1,2 @@
+#Metadata SideCar Files XMP
+http://www.sno.phy.queensu.ca/~phil/exiftool/metafiles.html

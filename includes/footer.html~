@@ -1,0 +1,7 @@
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script src="../ui/semantic/dist/semantic.min.js"></script>
+        <script src="../ui/js/jquery.photocols.min.js"></script>
+        <script src="../ui/js/jquery.mCustomScrollbar.concat.min.js"></script>
+        <script src="../ui/js/initCustomScrollbar.js"></script>
+	</body>
+</html>
