@@ -14,7 +14,8 @@ class Controller
 							'detail' => "detailAction",
 							'map' => "mapAction",
 							'about' => "aboutAction",
-							'upload' => "uploadAction"
+							'upload' => "uploadAction",
+							'ajaxHome' => "ajaxHomeAction"
 							);
 		$this->action = $action;
 	}
@@ -40,14 +41,55 @@ class Controller
 	 * */
 	 public function homeAction()
 	 {
-		 return TemplateRender::render('views/index.html',$res=array());
+		return TemplateRender::render('views/index.html',$res=array());
+	 }
+	 /**
+	  * Récupération des infos de métadata des images via ajax
+	  * */
+	 public function ajaxHomeAction()
+	 {
+		$files = glob("ui/images/photos/*.*");
+		$supported_file = array('gif','jpg','jpeg','png');
+		$res = array();
+		foreach($files as $image)
+		{
+			$ext = strtolower(pathinfo($image, PATHINFO_EXTENSION));
+			if (in_array($ext, $supported_file)) {
+				$data = array();
+				$line = array();
+				$row = array();
+				exec("exiftool -g0 -json {$image}", $data);
+				$line = (json_decode(implode($data),true));
+				//$data[] = $row;
+				//var_dump($row[0]);die;
+				$row['title'] = $line[0]['XMP']['Title'];
+				$row['subtitle'] = $line[0]['XMP']['Creator'].","." ".$line[0]['XMP']['Country'];
+				$row['url'] = "?a=detail&q=".pathinfo($image)['filename'].".".$ext;
+				$row['img'] = $image;
+				$res[] = $row;
+			}
+		}
+		
+		header('Content-Type: application/json');
+		
+		echo json_encode($res);die;
 	 }
 	 /**
 	 * Action de la page de détails d'une image
 	 * */
 	 public function detailAction()
 	 {
-		 return TemplateRender::render('views/details.html',$res=array());
+		 if (isset($_GET['q']) && !empty($_GET['q'])) {
+			 $image = $_GET['q'];
+			 $file = "ui/images/photos/{$image}";
+			 if (file_exists($file)) {
+				 $res = $image;
+			 } else {
+				 throw new Exception("Image introuvable, vérifier bien la valeur du paramètre q");
+			 }
+		 }
+		 
+		 return TemplateRender::render('views/details.html',$res);
 	 }
 	 /**
 	 * Action de la page d'affichage de la carte
