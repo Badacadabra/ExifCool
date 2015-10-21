@@ -79,13 +79,16 @@ class Controller
 	 * */
 	 public function detailAction()
 	 {
+		 $res = array();
 		 if (isset($_GET['q']) && !empty($_GET['q'])) {
-			 $image = $_GET['q'];
-			 $file = "ui/images/photos/{$image}";
-			 if (file_exists($file)) {
-				 $res = $image;
+			 $image = "ui/images/photos/{$_GET['q']}";
+			 if (file_exists($image)) {
+				$row = array();
+				$info = array();
+				exec("exiftool -g0 -json {$image}", $row);
+				$res = (json_decode(implode($row),true));
 			 } else {
-				 throw new Exception("Image introuvable, vérifier bien la valeur du paramètre q");
+				 throw new Exception("Image introuvable, vérifier bien la valeur du paramètre <b>q</b>");
 			 }
 		 }
 		 
