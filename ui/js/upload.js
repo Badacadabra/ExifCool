@@ -30,7 +30,6 @@
 	 * Permet de parser les infos d'une image donnée
 	 **/
 	function parseImgInfo (result) {
-		console.log(result);
 		$("#title").val(result.title);
 		$("#author").val(result.author);
 		$("#right").val(result.right);
