@@ -1,27 +1,27 @@
 		<section class="ui segment">
-            <form method="#" action="#" enctype="multipart/form-data">
+            <form method="#" action="#" enctype="multipart/form-data" id="upload-form">
                 <div id="file-container">
                     <label for="file" class="ui icon massive button">
                     <i class="photo icon"></i>
                     Uploader une image</label>
-                    <input type="file" id="file" value="">
+                    <input type="file" id="file" name="uploadImg">
                 </div>
                 <div id="upload-wrapper">
                     <div id="form-wrapper">
                         <div class="ui huge input">
-                            <input  type="text" placeholder="Titre">
+                            <input  type="text" placeholder="Titre" id="title">
                         </div>
                         <div class="ui huge input">
-                            <input  type="text" placeholder="Auteur">
+                            <input  type="text" placeholder="Auteur" id="author">
                         </div>
                         <div class="ui huge input">
-                            <input  type="text" placeholder="Licence">
+                            <input  type="text" placeholder="Licence" id="right">
                         </div>
                         <div class="ui huge input">
-                            <input  type="text" placeholder="Date">
+                            <input  type="text" placeholder="Date" id="create-date">
                         </div>
                         <div class="ui huge input">
-                            <input  type="text" placeholder="Lieu">
+                            <input  type="text" placeholder="Lieu" id="city">
                         </div>
                         <button class="ui primary big button">
                             Sauvegarder

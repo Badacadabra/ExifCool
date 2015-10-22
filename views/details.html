@@ -1,7 +1,7 @@
         <section class="ui segment">
             <div class="ui small basic icon buttons">
                 <a href="<?php echo $res[0]['SourceFile']; ?>" download id="downloadImage" class="ui button" data-content="Télécharger l'image"><i class="download icon"></i></a>
-                <a href="#" download id="downloadXmp" class="ui button" data-content="Télécharger le fichier XMP Sidecar"><i class="file icon"></i></a>
+                <a href="ui/images/photos/xmp/<?php echo pathinfo($res[0]['SourceFile'])['filename'].".xmp"; ?>" download id="downloadXmp" class="ui button" data-content="Télécharger le fichier XMP Sidecar"><i class="file icon"></i></a>
             </div>
             <a href="<?php echo $res[0]['SourceFile']; ?>" id="image-lightbox" data-lightbox="image" data-title="<?php echo $res[0]['XMP']['Title']; ?>">
                 <figure id="thumbnail" data-content="Cliquez pour agrandir" data-variation="inverted" data-position="right center">

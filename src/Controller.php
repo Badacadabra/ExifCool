@@ -15,7 +15,8 @@ class Controller
 							'map' => "mapAction",
 							'about' => "aboutAction",
 							'upload' => "uploadAction",
-							'ajaxHome' => "ajaxHomeAction"
+							'ajaxHome' => "ajaxHomeAction",
+							'uploadImgInfo' => "uploadImgInfoAction"
 							);
 		$this->action = $action;
 	}
@@ -26,15 +27,25 @@ class Controller
 				if (method_exists($this,$this->listActions[$this->action])) {
 					$action = $this->listActions[$this->action];
 					return $this->$action();
-				} else {
+				} else
 					throw new Exception("Impossible d'exécuter l'action, paramètre erroné.");
-				}
-			} else {
+			} else 
 				throw new Exception("Action non existante");
-			}
-		} else {
+		} else 
 			return $this->homeAction();
-		}
+	}
+	/**
+	 * Renvoie les métadonnées d'une image donnée
+	 * @param image : l'image 
+	 * **/
+	public function getMedataData($image)
+	{
+		if (file_exists($image)) {
+			$data = array();
+			exec("exiftool -g0 -json {$image}", $data);
+			return (json_decode(implode($data),true));
+		 } else 
+			 throw new Exception("Image introuvable, vérifier bien la valeur du paramètre <b>q</b>");
 	}
 	/**
 	 * Action de la page d'acceuil
@@ -55,13 +66,9 @@ class Controller
 		{
 			$ext = strtolower(pathinfo($image, PATHINFO_EXTENSION));
 			if (in_array($ext, $supported_file)) {
-				$data = array();
 				$line = array();
 				$row = array();
-				exec("exiftool -g0 -json {$image}", $data);
-				$line = (json_decode(implode($data),true));
-				//$data[] = $row;
-				//var_dump($row[0]);die;
+				$line = $this->getMedataData($image);
 				$row['title'] = $line[0]['XMP']['Title'];
 				$row['subtitle'] = $line[0]['XMP']['Creator'].","." ".$line[0]['XMP']['Country'];
 				$row['url'] = "?a=detail&q=".pathinfo($image)['filename'].".".$ext;
@@ -69,9 +76,7 @@ class Controller
 				$res[] = $row;
 			}
 		}
-		
 		header('Content-Type: application/json');
-		
 		echo json_encode($res);die;
 	 }
 	 /**
@@ -82,17 +87,42 @@ class Controller
 		 $res = array();
 		 if (isset($_GET['q']) && !empty($_GET['q'])) {
 			 $image = "ui/images/photos/{$_GET['q']}";
-			 if (file_exists($image)) {
-				$row = array();
-				$info = array();
-				exec("exiftool -g0 -json {$image}", $row);
-				$res = (json_decode(implode($row),true));
-			 } else {
-				 throw new Exception("Image introuvable, vérifier bien la valeur du paramètre <b>q</b>");
-			 }
+			 $res = $this->getMedataData($image);
+			 exec("exiftool -xmp -b {$image} -o ui/images/photos/xmp/".pathinfo($image)['filename'].".xmp");
 		 }
-		 
 		 return TemplateRender::render('views/details.html',$res);
+	 }
+	 /**
+	 * Action de la page de téléchargement
+	 * */
+	 public function uploadAction()
+	 {
+		 return TemplateRender::render('views/upload.html',$res=array());
+	 }
+	 /**
+	 * Renvoie les métadonnées de l'image encours de téléchargement
+	 * */
+	 public function uploadImgInfoAction()
+	 {
+		 if(isset($_FILES['uploadImg']) && $_FILES['uploadImg']['name']!='') {
+			$realName = $_FILES['uploadImg']['name'];
+			$ext = pathinfo($realName, PATHINFO_EXTENSION);
+			$tmp_name = $_FILES['uploadImg']['tmp_name'];
+			$name = sha1(uniqid(mt_rand(), true)).'.'.$ext;
+			move_uploaded_file($tmp_name,'ui/images/photos/'.$name);
+			$image = "ui/images/photos/".$name;
+			$row = $this->getMedataData($image);
+			$res = array();
+			$res['title'] = $row[0]['XMP']['Title'];
+			$res['author'] = $row[0]['XMP']['Creator'];
+			$res['right'] = $row[0]['XMP']['Rights'];
+			$res['createdDate'] = $row[0]['XMP']['CreateDate'];
+			$res['city'] = $row[0]['XMP']['City'];
+			
+			header('Content-Type: application/json');
+			echo json_encode($res);die;
+		} else
+			echo "Aucune image reçue";die;
 	 }
 	 /**
 	 * Action de la page d'affichage de la carte
@@ -107,12 +137,5 @@ class Controller
 	 public function aboutAction()
 	 {
 		 return TemplateRender::render('views/a-propos.html',$res=array());
-	 }
-	 /**
-	 * Action de la page de téléchargement
-	 * */
-	 public function uploadAction()
-	 {
-		 return TemplateRender::render('views/upload.html',$res=array());
 	 }
 }
