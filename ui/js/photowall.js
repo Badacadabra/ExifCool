@@ -18,13 +18,16 @@ PhotoWall = {
 		});
 	},
 	startWorker : function () {
-		var data;
 		if(typeof(Worker) !== "undefined") {
 			if(typeof(w) == "undefined") {
 				w = new Worker("ui/js/web_worker.js");
 			}
 			w.onmessage = function(event) {
-			  PhotoWall.config(event.data);
+				res = event.data;
+				if (res.code == 200)
+					PhotoWall.config(res.data);
+				else
+					alert(res.message);
 			};
 		} else {
 			console.log("Sorry! No Web Worker support.");

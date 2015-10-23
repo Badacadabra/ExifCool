@@ -4,14 +4,14 @@
  function Upload() {
 	 
 	 $( "#file").on('change',start);
+	 $("#save").on('click',sendImgInfo);
+	 $("#cancel").on('click',cancelUploading);
 	 function start () {
 		$("#selected-image").css("margin-left", "150px");
 		$("#form-wrapper").fadeIn();
 		if (typeof (FileReader) != "undefined") {
-
 				var selectedImage = $("#selected-image");
 				selectedImage.empty();
-
 				var reader = new FileReader();
 				reader.onload = function (e) {
 					$("<img />", {
@@ -21,7 +21,7 @@
 				selectedImage.show();
 				reader.readAsDataURL($( this )[0].files[0]);
 				/*****Envoie de l'image au serveur***/
-				send();
+				sendImg();
 		} else {
 			alert("Votre navigateur ne gère pas FileReader.");
 		}
@@ -29,17 +29,22 @@
 	/**
 	 * Permet de parser les infos d'une image donnée
 	 **/
-	function parseImgInfo (result) {
-		$("#title").val(result.title);
-		$("#author").val(result.author);
-		$("#right").val(result.right);
-		$("#create-date").val(result.createdDate);
-		$("#city").val(result.city);
+	function parseImgInfo (res) {
+		if (res.code == 200) {
+			$("#title").val(res.data.title);
+			$("#author").val(res.data.author);
+			$("#right").val(res.data.right);
+			$("#create-date").val(res.data.createdDate);
+			$("#city").val(res.data.city);
+		} else {
+			alert(res.message);
+		}
+		
 	}
-	/**
+	/****
 	 * Permet d'envoyer les images au serveur.
 	 * **/
-	function send() {
+	function sendImg() {
 		var fd = new FormData($("#upload-form")[0]);
 		$.ajax({
 			  url: "?a=uploadImgInfo",
@@ -48,6 +53,42 @@
 			  processData: false,
 			  contentType: false 
 			}).success(parseImgInfo);
+	}
+	/**
+	 * Permet d'envoyer les nouvelles données des images
+	 * au serveur.
+	 * **/
+	function sendImgInfo(ev) {
+		var data = {
+				title : $("#title").val(),
+				author : $("#author").val(),
+				right : $("#right").val(),
+				createDate : $("#create-date").val(),
+				city : $("#city").val()
+			};
+			
+		$.post("?a=validateImg",data).done(function(res) {
+			if (res.code == 200) {
+				var msg = confirm(res.message+'\nVoulez vous rajouter une nouvelle image ?\n\n Annuler : Aller sur la page de détail de l\'image\n OK : Ajouter une nouvelle image');
+				if(msg)
+					location.href = "?a=upload";
+				else
+					location.href = '?a=detail&q='+res.data;
+			} else
+				alert(res.message);
+		  });
+	  ev.preventDefault();
+	}
+	function cancelUploading (ev) {
+		var msg = confirm('Êtes-vous vraiment certain de vouloir annuler le téléchargement ?');
+		if (msg) {
+			$.post("?a=cancel").done(function(res) { 
+				if (res.code != 200) alert(res.message); else location.href = "?a=upload";
+			});
+		} else 
+			return false;
+			
+		ev.preventDefault();
 	}
  }
  

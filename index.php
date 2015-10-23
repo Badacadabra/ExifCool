@@ -1,6 +1,7 @@
 <?php
 require_once "src/Controller.php";
 
+session_start();
 
 try {
 	if (isset($_GET['a']) && !empty($_GET['a'])) {
