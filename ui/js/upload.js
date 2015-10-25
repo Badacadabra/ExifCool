@@ -35,7 +35,10 @@
 			$("#author").val(res.data.author);
 			$("#right").val(res.data.right);
 			$("#create-date").val(res.data.createdDate);
+			$("#headline").val(res.data.headline);
+			$("#country").val(res.data.country);
 			$("#city").val(res.data.city);
+			$("#desc").val(res.data.desc);
 		} else {
 			alert(res.message);
 		}
@@ -64,7 +67,10 @@
 				author : $("#author").val(),
 				right : $("#right").val(),
 				createDate : $("#create-date").val(),
-				city : $("#city").val()
+				city : $("#city").val(),
+				country : $("#country").val(),
+				headline : $("#headline").val(),
+				desc : $("#desc").val()
 			};
 			
 		$.post("?a=validateImg",data).done(function(res) {

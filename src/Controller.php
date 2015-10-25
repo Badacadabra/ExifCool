@@ -150,11 +150,15 @@ class Controller
 			$_SESSION['img'] = $image;
 			$row = $this->getMedataData($image);
 			$res = array();
+			//if (array_key_exists($row[0],'XMP'))
 			$res['title'] = $row[0]['XMP']['Title'];
 			$res['author'] = $row[0]['XMP']['Creator'];
 			$res['right'] = $row[0]['XMP']['Rights'];
 			$res['createdDate'] = $row[0]['XMP']['CreateDate'];
 			$res['city'] = $row[0]['XMP']['City'];
+			$res['desc'] = $row[0]['XMP']['Description'];
+			$res['country'] = $row[0]['XMP']['Country'];
+			$res['headline'] = $row[0]['XMP']['Headline'];
 			
 			$this->setResponse(200,"Opération terminée avec succès !",$res);
 		} else
@@ -180,6 +184,9 @@ class Controller
 										"XMP:Rights" => $_POST['right'],
 										"XMP:Creator" => $_POST['author'],
 										"XMP:City" => $_POST['city'],
+										"XMP:Country" => $_POST['country'],
+										"XMP:Headline" => $_POST['headline'],
+										"XMP:Description" => $_POST['desc'],
 										"EXIF:CreateDate" => $_POST['createDate']
 								));
 				file_put_contents('ui/images/photos/tmp.json', json_encode($data));
@@ -213,7 +220,47 @@ class Controller
 	 * */
 	 public function mapAction()
 	 {
-		 return TemplateRender::render('views/carte.html',$res=array());
+		$files = glob("ui/images/photos/*.*");
+		$res = array();
+		if (sizeof($files) > 0) {
+			foreach($files as $image)
+			{
+				$line = $this->getMedataData($image);
+				$res[] = $line;
+			}
+			$gpsLat = $res[0][0]['Composite']['GPSLatitude'];
+			$gpsLong = $res[0][0]['Composite']['GPSLongitude'];
+			
+			$latDegree = (int) substr($gpsLat,0,2);
+			$latMinute = (int) substr($gpsLat,7,2);
+			$latSeconds = (float) substr($gpsLat,11,5);
+			
+			$longDegree = (int) substr($gpsLong,0,2);
+			$longMinute = (int) substr($gpsLong,7,2);
+			$longSeconds = (float) substr($gpsLong,11,5);
+			
+			//Decimal value = Degrees + (Minutes/60) + (Seconds/3600)
+			
+			$latitude = substr($latDegree + ($latMinute/60) + ($latSeconds/3600),3,6);
+			$longitude = substr($longDegree + ($longMinute/60) + ($longSeconds/3600),3,6);
+			
+			var_dump($res[0][0]['Composite']['GPSLatitude']);
+			var_dump($res[0][0]['Composite']['GPSLongitude']);
+			echo '<br>';
+			echo "Lat : "." ".$latDegree." ".$latMinute." ".$latSeconds;
+			echo '<br>';
+			echo "Long : "." ".$longDegree." ".$longMinute." ".$longSeconds;
+			
+			echo '<br>';
+			echo "Latitude : ".$latitude;
+			echo '<br>';
+			echo "Longitude : "." ".$longitude;die;
+			
+		}
+			
+			
+		$this->setResponse(200,"Opération terminée avec succès !",$res);
+		return TemplateRender::render('views/carte.html',$res=array());
 	 }
 	 /**
 	 * Action de la page de à propos
