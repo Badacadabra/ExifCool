@@ -6,16 +6,22 @@ L.tileLayer('https://api.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token
 	id: 'badacadabra.cifwn7his023htrlzshz6jfmz',
 	accessToken: 'pk.eyJ1IjoiYmFkYWNhZGFicmEiLCJhIjoiY2lmd243aHNjMDI2enRjbTBiMndsbTMxYyJ9.t6qub-xAwB9RnfP4dE3DXw'
 }).addTo(map);
-
 // Ajout des marqueurs à partir de données au format JSON
-var data = {
-	markers: [
-		{ "latitude":60.1756, "longitude":24.9342, "image":"../ui/images/baptiste-vannesson.jpg" },
-		{ "latitude":48.8534100, "longitude":2.3488000, "image":"../ui/images/macky-dieng.jpg" },
-	]
-}
-
-for (var i = 0; i < data.markers.length; i++) {
-	var marker = L.marker([data.markers[i].latitude, data.markers[i].longitude]).addTo(map);
-	marker.bindPopup("<img src=\"" + data.markers[i].image + "\">");
-}
+$.get('?a=ajaxMap').done(function(res) {
+		console.log(res.data);
+		if (res.code == 200) {
+			var markers = res.data.markers;
+			for (i in markers) {
+				var marker = L.marker([markers[i].latitude, markers[i].longitude]).addTo(map);
+				marker.bindPopup("<img src=\"" + markers[i].image + "\">");
+			}
+		} else
+			alert(res.message);return false;
+});
+	
+//~ var data = {
+	//~ markers: [
+		//~ { "latitude":60.1756, "longitude":24.9342, "image":"../ui/images/baptiste-vannesson.jpg" },
+		//~ { "latitude":48.8534100, "longitude":2.3488000, "image":"../ui/images/macky-dieng.jpg" },
+	//~ ]
+//~ }

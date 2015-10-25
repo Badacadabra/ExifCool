@@ -6,7 +6,6 @@ $( document ).ready(function() {
 
 var search = function(e) {
 
-    
     //e.preventDefault();
     //e.stopPropagation();
 	console.log( $("#imageFlickr").val());

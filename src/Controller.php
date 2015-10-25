@@ -37,6 +37,7 @@ class Controller
 							'uploadImgInfo' => "uploadImgInfoAction",
 							'validateImg' => "validateUploadImgAction",
 							'cancel' => "cancelUploadingAction",
+							'ajaxMap' => "ajaxMapAction",
 							);
 		$this->action = $action;
 		$this->currentImg = null;
@@ -215,53 +216,54 @@ class Controller
 		$this->sendResponse();
 	  }
 	 /**
-	 * Action de la page d'affichage de la carte
-	 * @return TemplateRender
+	 * A
 	 * */
-	 public function mapAction()
+	 public function ajaxMapAction()
 	 {
 		$files = glob("ui/images/photos/*.*");
 		$res = array();
+		$data = array();
 		if (sizeof($files) > 0) {
 			foreach($files as $image)
 			{
 				$line = $this->getMedataData($image);
-				$res[] = $line;
+				if (array_key_exists('GPSLatitude',$line[0]['Composite']) 
+					&& array_key_exists('GPSLongitude',$line[0]['Composite'])) {
+					$gpsLat = $line[0]['Composite']['GPSLatitude'];
+					$gpsLong = $line[0]['Composite']['GPSLongitude'];
+					//Les différentes parties de la latitude
+					$latDegree = (int) substr($gpsLat,0,2);
+					$latMinute = (int) substr($gpsLat,7,2);
+					$latSeconds = (float) substr($gpsLat,11,5);
+					//Les différentes parties de la longitude
+					$longDegree = (int) substr($gpsLong,0,2);
+					$longMinute = (int) substr($gpsLong,7,2);
+					$longSeconds = (float) substr($gpsLong,11,5);
+					//Decimal value = Degrees + (Minutes/60) + (Seconds/3600)
+					$latitude = round($latDegree + ($latMinute/60) + ($latSeconds/3600),6);
+					$longitude = round($longDegree + ($longMinute/60) + ($longSeconds/3600),6);
+					$data[] = array ('latitude' => $latitude,
+									 'longitude' => $longitude,
+									 'image' => "../ui/images/photos/".pathinfo($image)['basename']
+									);
+				}
 			}
-			$gpsLat = $res[0][0]['Composite']['GPSLatitude'];
-			$gpsLong = $res[0][0]['Composite']['GPSLongitude'];
+			$res['markers'] = $data;
 			
-			$latDegree = (int) substr($gpsLat,0,2);
-			$latMinute = (int) substr($gpsLat,7,2);
-			$latSeconds = (float) substr($gpsLat,11,5);
-			
-			$longDegree = (int) substr($gpsLong,0,2);
-			$longMinute = (int) substr($gpsLong,7,2);
-			$longSeconds = (float) substr($gpsLong,11,5);
-			
-			//Decimal value = Degrees + (Minutes/60) + (Seconds/3600)
-			
-			$latitude = substr($latDegree + ($latMinute/60) + ($latSeconds/3600),3,6);
-			$longitude = substr($longDegree + ($longMinute/60) + ($longSeconds/3600),3,6);
-			
-			var_dump($res[0][0]['Composite']['GPSLatitude']);
-			var_dump($res[0][0]['Composite']['GPSLongitude']);
-			echo '<br>';
-			echo "Lat : "." ".$latDegree." ".$latMinute." ".$latSeconds;
-			echo '<br>';
-			echo "Long : "." ".$longDegree." ".$longMinute." ".$longSeconds;
-			
-			echo '<br>';
-			echo "Latitude : ".$latitude;
-			echo '<br>';
-			echo "Longitude : "." ".$longitude;die;
-			
-		}
-			
-			
-		$this->setResponse(200,"Opération terminée avec succès !",$res);
-		return TemplateRender::render('views/carte.html',$res=array());
+			$this->setResponse(200,"Opération terminée avec succès !",$res);
+		} else
+			$this->setResponse(400,"Aucune image trouvée!",$res);
+		
+		$this->sendResponse();
 	 }
+	 /**
+	 * Action de la page d'affichage de la carte
+	 * @return TemplateRender
+	 * */
+	  public function mapAction()
+	  {
+		  return TemplateRender::render('views/carte.html',$res=array());
+	  }
 	 /**
 	 * Action de la page de à propos
 	 * */
