@@ -341,6 +341,10 @@ class Controller
 					$gpsLat = $line[0]['Composite']['GPSLatitude'];
 					$gpsLong = $line[0]['Composite']['GPSLongitude'];
 					//Les différentes parties de la latitude
+					
+					$longCardinate = substr($gpsLong,18,1);
+					$latCardinate = substr($gpsLat,18,1);
+
 					$latDegree = (int) substr($gpsLat,0,2);
 					$latMinute = (int) substr($gpsLat,7,2);
 					$latSeconds = (float) substr($gpsLat,11,5);
@@ -351,6 +355,11 @@ class Controller
 					//Decimal value = Degrees + (Minutes/60) + (Seconds/3600)
 					$latitude = round($latDegree + ($latMinute/60) + ($latSeconds/3600),6);
 					$longitude = round($longDegree + ($longMinute/60) + ($longSeconds/3600),6);
+					if ($latCardinate == "S")
+						$latitude = -$latitude;
+					if ($longCardinate == "W")
+						$longitude = -$longitude;
+						
 					$data[] = array ('latitude' => $latitude,
 									 'longitude' => $longitude,
 									 'image' => "../ui/images/photos/".pathinfo($image)['basename']

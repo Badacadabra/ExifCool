@@ -97,7 +97,7 @@
             <div class="ui left icon input">
                 <select id="imageFlickr" style="width:500px;">
                     <option selected>------------------------------------------------------</option>
-                    <option value="<?php echo $res[0]['XMP']['Contry']?>"><b style="font-weight:bold;">Pays</b> : <?php echo $res[0]['XMP']['Country']?></option>
+                    <option value="<?php echo $res[0]['XMP']['Country']?>"><b style="font-weight:bold;">Pays</b> : <?php echo $res[0]['XMP']['Country']?></option>
                     <option value="<?php echo $res[0]['XMP']['City']?>"><b style="font-weight:bold;">Ville</b> : <?php echo $res[0]['XMP']['City']?></option>
                     <optgroup label="Mots clés" style="font-weight:bold;">
                     <?php foreach($res[0]['IPTC']['Keywords'] as $kw) {
