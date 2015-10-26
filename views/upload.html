@@ -6,31 +6,60 @@
                     Uploader une image</label>
                     <input type="file" id="file" name="uploadImg">
                 </div>
+                <div class="ui divider"></div>
                 <div id="upload-wrapper">
-                    <div id="form-wrapper">
-                        <div class="ui huge input">
-                            <input  type="text" placeholder="Titre" id="title">
+                    <div id="form-wrapper" class="ui large form">
+                        <div id="upload-loader" class="ui icon message">
+                            <i class="notched circle loading icon"></i>
+                            <div class="content">
+                                <div class="header">
+                                    Un peu de patience !
+                                </div>
+                                <p>Extraction des métadonnées en cours...</p>
+                            </div>
                         </div>
-                        <div class="ui huge input">
-                            <input  type="text" placeholder="Auteur" id="author">
+                        <div class="ui yellow icon message">
+                            <i class="pin icon"></i>
+                            <div class="content">
+                                <div class="header">
+                                    Cette page n'est qu'une prévisualisation.
+                                </div>
+                                <p>Vous devez cliquer sur « Sauvegarder » pour uploader votre image.</p>
+                            </div>
                         </div>
-                        <div class="ui huge input">
-                            <input  type="text" placeholder="Licence" id="right">
+                        <div class="field">
+                            <label>Titre</label>
+                            <input type="text" placeholder="Titre" id="title">
                         </div>
-                        <div class="ui huge input">
-                            <input  type="text" placeholder="Date" id="create-date">
+                        <div class="field">
+                            <label>Auteur</label>
+                            <input type="text" placeholder="Auteur" id="author">
                         </div>
-                         <div class="ui huge input">
-                            <input  type="text" placeholder="Entête" id="headline">
+                        <div class="field">
+                            <label>Licence</label>
+                            <input type="text" placeholder="Licence" id="right">
                         </div>
-                         <div class="ui huge input">
-                            <input  type="text" placeholder="Pays" id="country">
+                        <div class="field">
+                            <label>Date</label>
+                            <input type="text" placeholder="Date" id="create-date">
                         </div>
-                        <div class="ui huge input">
-                            <input  type="text" placeholder="Lieu" id="city">
+                        <div class="field">
+                            <label>Entête</label>
+                            <input type="text" placeholder="Entête" id="headline">
                         </div>
-                         <div class="ui huge input">
-                            <textarea placeholder="la description" id="desc" style="width:300px;height:160px;"></textarea>
+                        <div class="two fields">
+                            <div class="field">
+                                <label>Ville</label>
+                                <input type="text" placeholder="Ville" id="city">
+                            </div>
+                            <div class="field">
+                                 <label>Pays</label>
+                                <input type="text" placeholder="Pays" id="country">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label>Description</label>
+                            <textarea id="desc" placeholder="Description" ></textarea>
                         </div>
                         <button class="ui primary big button" id="save">
                             Sauvegarder
@@ -38,6 +67,24 @@
                         <button class="ui red big button" id="cancel">
                             Annuler
                         </button>
+                    </div>
+                    <div id="confirm-upload" class="ui basic modal">
+                        <div class="ui icon header">
+                            Souhaitez-vous ajouter une autre image ?
+                        </div>
+                        <div class="actions">
+                            <div class="ui massive red cancel inverted button">Non</div>
+                            <div class="ui massive green ok inverted button">Oui</div>
+                        </div>
+                    </div>
+                    <div id="cancel-upload" class="ui basic modal">
+                        <div class="ui icon header">
+                            Voulez-vous vraiment mettre fin à l'upload ?
+                        </div>
+                        <div class="actions">
+                            <div class="ui massive red cancel inverted button">Non</div>
+                            <div class="ui massive green ok inverted button">Oui</div>
+                        </div>
                     </div>
                     <div id="selected-image">
                         <img src="ui/images/default_image.png" alt="" itemprop="primaryImageOfPage">

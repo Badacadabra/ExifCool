@@ -58,6 +58,12 @@ nav.menu {
 /* ================== Détails ==================== */
 /* =============================================== */
 
+div#content-wrapper {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+}
+
 a#image-lightbox figure#thumbnail {
     width: 500px;
     margin: 20px 0 !important;
@@ -116,6 +122,7 @@ a#image-lightbox figure#thumbnail figcaption {
 
 #upload-wrapper {
     display: flex !important;
+    align-items: center !important;
 }
 
 #form-wrapper {
@@ -130,10 +137,15 @@ a#image-lightbox figure#thumbnail figcaption {
 
 #selected-image {
     max-width: 45%;
+    height: 366px;
 }
 
 #selected-image img {
-    width: 500px;
+    height: 350px;
+}
+
+div.ui.basic.modal div.ui.icon.header {
+    font-size: xx-large;
 }
 
 /* =============================================== */

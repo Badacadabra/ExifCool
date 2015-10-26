@@ -108,7 +108,7 @@ class Controller
 			}
 			$this->setResponse(200,"Opération terminée avec succès !",$res);
 		} else
-			$this->setResponse(400,"Erreur survenue lors du chargément des images !");
+			$this->setResponse(400,"Erreur survenue lors du chargement des images !");
 			
 		$this->sendResponse();
 	 }

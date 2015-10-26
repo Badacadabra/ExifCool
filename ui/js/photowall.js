@@ -24,13 +24,15 @@ PhotoWall = {
 			}
 			w.onmessage = function(event) {
 				res = event.data;
+                $( "#photowall" ).removeClass( "ui active dimmer" );
+                $( "#main-loader" ).hide();
 				if (res.code == 200)
 					PhotoWall.config(res.data);
 				else
 					alert(res.message);
 			};
 		} else {
-			console.log("Sorry! No Web Worker support.");
+			console.log("Nous sommes désolés. Les web workers ne sont pas gérés par votre navigateur.");
 		}
 		return true;
 	},

@@ -3,11 +3,11 @@
  * **/
  function Upload() {
 	 
-	 $( "#file").on('change',start);
-	 $("#save").on('click',sendImgInfo);
-	 $("#cancel").on('click',cancelUploading);
+	 $( "#file" ).on('change',start);
+	 $( "#save" ).on('click',sendImgInfo);
+	 $( "#cancel" ).on('click',cancelUploading);
 	 function start () {
-		$("#selected-image").css("margin-left", "150px");
+        // Visualisation de l'image avant upload
 		$("#form-wrapper").fadeIn();
 		if (typeof (FileReader) != "undefined") {
 				var selectedImage = $("#selected-image");
@@ -20,25 +20,32 @@
 				}
 				selectedImage.show();
 				reader.readAsDataURL($( this )[0].files[0]);
-				/*****Envoie de l'image au serveur***/
+				/*****Envoi de l'image au serveur***/
 				sendImg();
 		} else {
 			alert("Votre navigateur ne gère pas FileReader.");
 		}
+        // Ajustements ergonomiques
+        $( "#selected-image" ).css({
+            "margin-left" : "150px",
+            "border" : "solid 8px black",
+            "box-shadow" : "7px 7px 5px gray"
+        });
 	}
 	/**
 	 * Permet de parser les infos d'une image donnée
 	 **/
 	function parseImgInfo (res) {
+        $( "#upload-loader" ).fadeOut();
 		if (res.code == 200) {
-			$("#title").val(res.data.title);
-			$("#author").val(res.data.author);
-			$("#right").val(res.data.right);
-			$("#create-date").val(res.data.createdDate);
-			$("#headline").val(res.data.headline);
-			$("#country").val(res.data.country);
-			$("#city").val(res.data.city);
-			$("#desc").val(res.data.desc);
+			$( "#title" ).val(res.data.title);
+			$( "#author" ).val(res.data.author);
+			$( "#right" ).val(res.data.right);
+			$( "#create-date" ).val(res.data.createdDate);
+			$( "#headline" ).val(res.data.headline);
+			$( "#country" ).val(res.data.country);
+			$( "#city" ).val(res.data.city);
+			$( "#desc" ).val(res.data.desc);
 		} else {
 			alert(res.message);
 		}
@@ -48,6 +55,7 @@
 	 * Permet d'envoyer les images au serveur.
 	 * **/
 	function sendImg() {
+        $( "#upload-loader" ).fadeIn();
 		var fd = new FormData($("#upload-form")[0]);
 		$.ajax({
 			  url: "?a=uploadImgInfo",
@@ -75,29 +83,35 @@
 			
 		$.post("?a=validateImg",data).done(function(res) {
 			if (res.code == 200) {
-				var msg = confirm(res.message+'\nVoulez vous rajouter une nouvelle image ?\n\n Annuler : Aller sur la page de détail de l\'image\n OK : Ajouter une nouvelle image');
-				if(msg)
-					location.href = "?a=upload";
-				else
-					location.href = '?a=detail&q='+res.data;
+				// var msg = confirm(res.message+'\nVoulez-vous ajouter une nouvelle image ?\n\n Annuler : Aller sur la page de détail de l\'image\n OK : Ajouter une nouvelle image');
+                $('#confirm-upload').modal({
+                    onApprove: function () {
+                        location.href = "?a=upload";
+                    },
+                    onDeny: function() {
+                        location.href = '?a=detail&q='+res.data;
+                    }
+                }).modal('show');
 			} else
 				alert(res.message);
 		  });
-	  ev.preventDefault();
+          
+        ev.preventDefault();
 	}
+    
 	function cancelUploading (ev) {
-		var msg = confirm('Êtes-vous vraiment certain de vouloir annuler le téléchargement ?');
-		if (msg) {
-			$.post("?a=cancel").done(function(res) { 
-				if (res.code != 200) alert(res.message); else location.href = "?a=upload";
-			});
-		} else 
-			return false;
-			
+        $('#cancel-upload').modal({
+            onApprove: function () {
+                $.post("?a=cancel").done(function(res) {
+                    if (res.code != 200) alert(res.message); else location.href = "?a=upload";
+                });
+            }
+        }).modal('show');
+        
 		ev.preventDefault();
 	}
  }
  
-$(document).ready(function() {
+$( document ).ready(function() {
 	upload = new Upload();
 });
