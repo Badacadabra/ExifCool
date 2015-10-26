@@ -36,6 +36,7 @@
 	 * Permet de parser les infos d'une image donnée
 	 **/
 	function parseImgInfo (res) {
+		console.log(res);
         $( "#upload-loader" ).fadeOut();
 		if (res.code == 200) {
 			$( "#title" ).val(res.data.title);
@@ -46,6 +47,10 @@
 			$( "#country" ).val(res.data.country);
 			$( "#city" ).val(res.data.city);
 			$( "#desc" ).val(res.data.desc);
+			$( "#authorURL" ).val(res.data.creatorWorkURL);
+			$( "#usageTerms" ).val(res.data.usageTerms);
+			$( "#credit").val(res.data.credit);
+			$( "#source").val(res.data.source);
 		} else {
 			alert(res.message);
 		}
@@ -70,6 +75,14 @@
 	 * au serveur.
 	 * **/
 	function sendImgInfo(ev) {
+		
+		if ($("#title").val() == "") {
+				alert("Le titre de l'image est obligatoire");
+				return false;
+		} else if($("#author").val() == "") {
+				alert("L'auteur de l'image est obligatoire");
+				return false;
+		}
 		var data = {
 				title : $("#title").val(),
 				author : $("#author").val(),
@@ -78,12 +91,15 @@
 				city : $("#city").val(),
 				country : $("#country").val(),
 				headline : $("#headline").val(),
-				desc : $("#desc").val()
+				desc : $("#desc").val(),
+				authorUrl : $( "#authorURL" ).val(),
+				usageTerms : $("#usageTerms" ).val(),
+				credit : $( "#credit").val(),
+				source : $( "#source").val()
 			};
 			
 		$.post("?a=validateImg",data).done(function(res) {
 			if (res.code == 200) {
-				// var msg = confirm(res.message+'\nVoulez-vous ajouter une nouvelle image ?\n\n Annuler : Aller sur la page de détail de l\'image\n OK : Ajouter une nouvelle image');
                 $('#confirm-upload').modal({
                     onApprove: function () {
                         location.href = "?a=upload";
@@ -98,7 +114,6 @@
           
         ev.preventDefault();
 	}
-    
 	function cancelUploading (ev) {
         $('#cancel-upload').modal({
             onApprove: function () {
@@ -107,7 +122,6 @@
                 });
             }
         }).modal('show');
-        
 		ev.preventDefault();
 	}
  }

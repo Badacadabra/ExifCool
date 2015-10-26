@@ -145,21 +145,112 @@ class Controller
 			$realName = $_FILES['uploadImg']['name'];
 			$ext = pathinfo($realName, PATHINFO_EXTENSION);
 			$tmp_name = $_FILES['uploadImg']['tmp_name'];
-			$name = sha1(uniqid(mt_rand(), true)).'.'.$ext;
+			$name = uniqid(mt_rand(), true).'.'.$ext;
 			move_uploaded_file($tmp_name,'ui/images/photos/'.$name);
 			$image = "ui/images/photos/".$name;
 			$_SESSION['img'] = $image;
 			$row = $this->getMedataData($image);
 			$res = array();
-			//if (array_key_exists($row[0],'XMP'))
-			$res['title'] = $row[0]['XMP']['Title'];
-			$res['author'] = $row[0]['XMP']['Creator'];
-			$res['right'] = $row[0]['XMP']['Rights'];
-			$res['createdDate'] = $row[0]['XMP']['CreateDate'];
-			$res['city'] = $row[0]['XMP']['City'];
-			$res['desc'] = $row[0]['XMP']['Description'];
-			$res['country'] = $row[0]['XMP']['Country'];
-			$res['headline'] = $row[0]['XMP']['Headline'];
+			$title = null;
+			$author = null; 
+			$right = null;
+			$createDate = null;
+			$city = null; 
+			$desc = null; 
+			$country = null;
+			$headline = null; 
+			$creatorWorkURL = null; 
+			$usageTerms = null;
+			$source = null;
+			$credit = null;
+			
+			
+			if (array_key_exists('XMP',$row[0]) || array_key_exists('IPTC',$row[0])) {
+				if (array_key_exists('Title',$row[0]['XMP']))
+					$title = $row[0]['XMP']['Title'];
+				elseif (array_key_exists('Title',$row[0]['IPTC']))
+					$title = $row[0]['IPTC']['Title'];
+				else
+					$tile = null;
+				if (array_key_exists('Creator',$row[0]['XMP']))
+					$author = $row[0]['XMP']['Creator'];
+				elseif (array_key_exists('Creator',$row[0]['IPTC']))
+					$author = $row[0]['IPTC']['Creator'];
+				else
+					$author = null;
+				if (array_key_exists('Rights',$row[0]['XMP']))
+					$right = $row[0]['XMP']['Rights'];
+				elseif (array_key_exists('Rights',$row[0]['IPTC']))
+					$right = $row[0]['IPTC']['Rights'];
+				else
+					$right = null;
+				if (array_key_exists('CreateDate',$row[0]['XMP']))
+					$createDate = $row[0]['XMP']['CreateDate'];
+				elseif (array_key_exists('CreateDate',$row[0]['IPTC']))
+					$createDate = $row[0]['IPTC']['CreateDate'];
+				else
+					$createDate = null;
+				if (array_key_exists('City',$row[0]['XMP']))
+					$city = $row[0]['XMP']['City'];
+				elseif (array_key_exists('City',$row[0]['IPTC']))
+					$city = $row[0]['IPTC']['City'];
+				else
+					$city = null;
+				if (array_key_exists('Description',$row[0]['XMP']))
+					$desc = $row[0]['XMP']['Description'];
+				elseif (array_key_exists('Description',$row[0]['IPTC']))
+					$desc = $row[0]['IPTC']['Description'];
+				else
+					$desc = null;
+				if (array_key_exists('Country',$row[0]['XMP']))
+					$country = $row[0]['XMP']['Country'];
+				elseif (array_key_exists('Country',$row[0]['IPTC']))
+					$country = $row[0]['IPTC']['Country'];
+				else
+					$country = null;
+				if (array_key_exists('Headline',$row[0]['XMP']))
+					$headline = $row[0]['XMP']['Headline'];
+				elseif (array_key_exists('Headline',$row[0]['IPTC']))
+					$headline = $row[0]['IPTC']['Headline'];
+				else
+					$headline = null;
+				if (array_key_exists('CreatorWorkURL',$row[0]['XMP']))
+					$creatorWorkURL = $row[0]['XMP']['CreatorWorkURL'];
+				elseif (array_key_exists('CreatorWorkURL',$row[0]['IPTC']))
+					$creatorWorkURL = $row[0]['IPTC']['CreatorWorkURL'];
+				else
+					$creatorWorkURL = null;
+				if (array_key_exists('UsageTerms',$row[0]['XMP']))
+					$usageTerms = $row[0]['XMP']['UsageTerms'];
+				elseif (array_key_exists('UsageTerms',$row[0]['IPTC']))
+					$usageTerms = $row[0]['IPTC']['UsageTerms'];
+				else
+					$usageTerms = null;
+				if (array_key_exists('Source',$row[0]['XMP']))
+					$source = $row[0]['XMP']['Source'];
+				elseif (array_key_exists('Source',$row[0]['IPTC']))
+					$source = $row[0]['IPTC']['Source'];
+				else
+					$source = null;
+				if (array_key_exists('Credit',$row[0]['XMP']))
+					$credit = $row[0]['XMP']['Credit'];
+				elseif (array_key_exists('Credit',$row[0]['IPTC']))
+					$credit = $row[0]['IPTC']['Credit'];
+				else
+					$credit = null;
+			}
+			$res['title'] = $title;
+			$res['author'] = $author;
+			$res['right'] = $right;
+			$res['createdDate'] = $createDate;
+			$res['city'] = $city;
+			$res['desc'] = $desc;
+			$res['country'] = $country;
+			$res['headline'] = $headline;
+			$res['creatorWorkURL'] = $creatorWorkURL;
+			$res['usageTerms'] = $usageTerms;
+			$res['source'] = $source;
+			$res['credit'] = $credit;
 			
 			$this->setResponse(200,"Opération terminée avec succès !",$res);
 		} else
@@ -178,17 +269,33 @@ class Controller
 		 if (isset($_SESSION['img']) && !empty($_SESSION['img'])) {
 			if (isset($_POST['title']) && isset($_POST['author'])
 				&& isset($_POST['right']) && isset($_POST['createDate'])
-				&& isset($_POST['city'])) {
+				&& isset($_POST['city']) && isset($_POST['authorUrl'])
+				&& isset($_POST['usageTerms']) && isset($_POST['credit'])
+				&& isset($_POST['source'])) {
 				$image = $_SESSION['img'];
+				$right = !empty($_POST['right']) ? $_POST['right'] : "_none";
+				$city = !empty($_POST['city']) ? $_POST['city'] : "_none";
+				$country = !empty($_POST['country']) ? $_POST['country'] : "_none";
+				$headline = !empty($_POST['headline']) ? $_POST['headline'] : "_none";
+				$desc = !empty($_POST['desc']) ? $_POST['desc'] : "_none";
+				$createDate = !empty($_POST['createDate']) ? $_POST['createDate'] : "_none";
+				$authorUrl = !empty($_POST['authorUrl']) ? $_POST['authorUrl'] : "_none";
+				$usageTerms = !empty($_POST['usageTerms']) ? $_POST['usageTerms'] : "_none";
+				$credit = !empty($_POST['credit']) ? $_POST['credit'] : "_none";
+				$source = !empty($_POST['source']) ? $_POST['source'] : "_none";
+				
 				$data = array(array("SourceFile" => $image,
 										"XMP:Title" => $_POST['title'],
-										"XMP:Rights" => $_POST['right'],
+										"XMP:Rights" => $right,
 										"XMP:Creator" => $_POST['author'],
-										"XMP:City" => $_POST['city'],
-										"XMP:Country" => $_POST['country'],
-										"XMP:Headline" => $_POST['headline'],
-										"XMP:Description" => $_POST['desc'],
-										"EXIF:CreateDate" => $_POST['createDate']
+										"XMP:City" => $city,
+										"XMP:Country" => $country,
+										"XMP:Headline" => $headline,
+										"XMP:Description" => $desc,
+										"XMP:CreatorWorkerURL" => $authorUrl,
+										"XMP:UsageTerms" => $usageTerms,
+										"IPTC:Credit" => $credit,
+										"IPTC:Source" => $createDate
 								));
 				file_put_contents('ui/images/photos/tmp.json', json_encode($data));
 				exec("exiftool -json=ui/images/photos/tmp.json {$image}");
@@ -208,8 +315,10 @@ class Controller
 	  * **/
 	  public function cancelUploadingAction ()
 	  {
-		  if (unlink($_SESSION['img']))
+		  if (isset($_SESSION['img'])) {
+				unlink($_SESSION['img']);
 				$this->setResponse(200,"Opération terminée avec succès !");
+			}
 		   else
 				$this->setResponse(200,"Erreur survenue lors de l'annulation !");
 				

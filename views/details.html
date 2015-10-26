@@ -17,12 +17,17 @@
                         Métadonnées EXIF
                     </div>
                     <div class="active content">
-                        <?php 
+                        <?php
+                        if (array_key_exists('EXIF',$res[0])) {
                             foreach($res[0]['EXIF'] as $k => $v) {
-                                echo '<div class="item">
-                                        <div class="content"><b>'.$k.'</b> : <span itemprop="name">'.$v.'</span></div>
-                                    </div>';
+                               if ($v !="_none") {
+									echo '<div class="item">
+											<div class="content"><b>'.$k.'</b> : <span itemprop="name">'.$v.'</span></div>
+										</div>';
+								}
                             } 
+						} else
+							echo '<div class="item">Aucune données pour cette section</div>';
                         ?>
                     </div>
                     <div class="title">
@@ -31,6 +36,7 @@
                     </div>
                     <div class="content">
                         <?php 
+                        if (array_key_exists('XMP',$res[0])) {
                             foreach($res[0]['XMP'] as $k => $v) {
                                 if ($k =='Subject') {
                                     echo '<ol style="list-style:none;">
@@ -42,11 +48,15 @@
                                     </li>
                                 </ol>';
                                 }  else {
-                                    echo '<div class="item">
-                                            <div class="content"><b>'.$k.'</b> : <span itemprop="name">'.$v.'</span></div>
-                                        </div>';
+                                   if ($v !="_none") {
+										echo '<div class="item">
+												<div class="content"><b>'.$k.'</b> : <span itemprop="name">'.$v.'</span></div>
+											</div>';
+									}
                                 }
-                            } 
+                            }
+						 } else
+							echo '<div class="item">Aucune données pour cette section</div>';
                         ?>
                     </div>
                     <div class="title">
@@ -55,6 +65,7 @@
                     </div>
                     <div class="content">
                         <?php 
+                       if (array_key_exists('IPTC',$res[0])) {
                             foreach($res[0]['IPTC'] as $k => $v) {
                                 if ($k =='Keywords') {
                                     echo '<ol style="list-style:none;">
@@ -66,47 +77,19 @@
                                     </li>
                                 </ol>';
                                 }  else {
-                                    echo '<div class="item">
-                                            <div class="content"><b>'.$k.'</b> : <span itemprop="name">'.$v.'</span></div>
-                                        </div>';
+									if ($v !="_none") {
+										echo '<div class="item">
+												<div class="content"><b>'.$k.'</b> : <span itemprop="name">'.$v.'</span></div>
+											</div>';
+									}
                                 }
-                            } 
+                            }
+						 } else
+							echo '<div class="item">Aucune données pour cette section</div>';
                         ?>
                     </div>
                 </div>
-    <!--
-                    <div class="item">
-                        <i class="quote left icon"></i>
-                        <div class="content">
-                            Titre : <span itemprop="name">...</span>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <i class="user icon"></i>
-                        <div class="content">
-                            Auteur : <span itemprop="author">...</span>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <i class="copyright icon"></i>
-                        <div class="content">
-                            Licence : <span itemprop="license">...</span>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <i class="calendar icon"></i>
-                        <div class="content">
-                            Date : <span itemprop="datePublished">...</span>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <i class="marker icon"></i>
-                        <div class="content">
-                            Lieu : <span itemprop="contentLocation">...</span>
-                        </div>
-                    </div>
-                </div>
-    -->
+    
         </div>
         <div class="ui divider"></div>
         <div id="flickr">
@@ -122,15 +105,6 @@
                     }?>
                     </optgroup>
                 </select>
-<!--				
-                <input id="imageFlickr" type="text" placeholder="Chercher sur Flickr...">
--->
-<!--
-                <i class="flickr icon"></i>
-                <button id="flickr-request" class="ui icon button">
-                    <i class="search icon"></i>
-                </button>
--->
             </div>
             <div id="flickr-response" itemscope itemtype="https://schema.org/ImageGallery"></div>
         </div>
