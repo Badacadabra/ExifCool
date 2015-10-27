@@ -14,7 +14,7 @@ L.tileLayer('https://api.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token
 $.get('?a=ajaxMap').done(function(res) {
 	if (res.code == 200) {
 		 $( ".ui.active.page.dimmer" ).hide();
-		if (res.data.length > 0) {
+		if (res.data.markers.length > 0) {
 			var markers = res.data.markers;
 			for (i in markers) {
 				var marker = L.marker([markers[i].latitude, markers[i].longitude]).addTo(map);

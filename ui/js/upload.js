@@ -156,7 +156,7 @@
                         location.href = "?a=upload";
                     },
                     onDeny: function() {
-                        location.href = '?a=detail&q='+res.data;
+                        location.href = '?a=detail&q='+res.data.image+'&t='+res.data.title;
                     }
                 }).modal('show');
 			} else

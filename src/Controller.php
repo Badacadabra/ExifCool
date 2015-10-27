@@ -302,7 +302,9 @@ class Controller
 				exec("exiftool -json=ui/images/photos/tmp.json {$image}");
 				unlink('ui/images/photos/tmp.json');
 				unlink($image.'_original');
-				$this->setResponse(200,"Opération terminée avec succès !",pathinfo($image)['basename']);
+				$res['image'] = pathinfo($image)['basename'];
+				$res['title'] = $_POST['title'];
+				$this->setResponse(200,"Opération terminée avec succès !",$res);
 				unset($_SESSION['img']);
 			} else
 				$this->setResponse(400,"Erreur survenue lors de la validation, aucune image reçue");
