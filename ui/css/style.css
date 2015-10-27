@@ -161,3 +161,12 @@ div.ui.basic.modal div.ui.icon.header {
 .cards {
     margin-top: 20px !important;
 }
+
+.ui.search > .results {
+    width: 100% !important;
+    border-radius: 0 !important;
+}
+
+.ui.search > .results > .category > .result {
+    margin-left: 0 !important;
+}

@@ -8,6 +8,16 @@
 	 $( "#cancel" ).on('click',cancelUploading);
 	 function start () {
         // Visualisation de l'image avant upload
+        var fd = new FormData($("#upload-form")[0]);
+		var file = $("#file")[0].files[0],
+			fileName = file.name,
+			fileExt = (file.name).split('.').pop(),
+			acceptedExtensions = ["jpg","png","jpeg","svg"];
+			if ($.inArray(fileExt,acceptedExtensions) <= -1) {
+				alert("Le fichier que vous essayer de télécharger n'est pas pris en compte par le système.\n\n\
+					Fichiers acceptés : jpg, png, jpeg, svg.");
+				return false;
+			}
 		$("#form-wrapper").fadeIn();
 		if (typeof (FileReader) != "undefined") {
 				var selectedImage = $("#selected-image");
@@ -21,7 +31,7 @@
 				selectedImage.show();
 				reader.readAsDataURL($( this )[0].files[0]);
 				/*****Envoi de l'image au serveur***/
-				sendImg();
+				sendImg(fd);
 		} else {
 			alert("Votre navigateur ne gère pas FileReader.");
 		}
@@ -58,14 +68,14 @@
 	}
 	/****
 	 * Permet d'envoyer les images au serveur.
+	 * @param Object fileData : le fichier image à envoyer
 	 * **/
-	function sendImg() {
+	function sendImg(fileData) {
         $( "#upload-loader" ).fadeIn();
-		var fd = new FormData($("#upload-form")[0]);
 		$.ajax({
 			  url: "?a=uploadImgInfo",
 			  type: "POST",
-			  data: fd,
+			  data: fileData,
 			  processData: false,
 			  contentType: false 
 			}).success(parseImgInfo);

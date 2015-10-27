@@ -395,22 +395,24 @@ class Controller
 	  * */
 	  public function searchAction ()
 	  {
-		  $files = glob("ui/images/photos/*.*");
-		  $supported_file = array('gif','jpg','jpeg','png');
-		  $res = array();
-		  if (sizeof($files) > 0) {
-			  foreach($files as $image) {
-				$ext = strtolower(pathinfo($image, PATHINFO_EXTENSION));
-				$line = $this->getMedataData($image);
-				$row['title'] = $line[0]['XMP']['Title'];
-				$row['url'] = "?a=detail&q=".pathinfo($image)['filename'].".".$ext."&t=".$line[0]['XMP']['Title'];
-				$res[] = $row;
-			  }
-			  $this->setResponse(200,"Opération terminée avec succès !",$res);
-		  } else
-				$this->setResponse(400,"Erreur survenue aucours de la récupération des données ! ",$res);
-				
-		 $this->sendResponse();
+		  if (isset($_GET['q']) && !empty($_GET['q'])) {
+			  $files = glob("ui/images/photos/*".$_GET['q']."*.*",GLOB_BRACE);
+			  $supported_file = array('gif','jpg','jpeg','png');
+			  $res = array();
+			  if (sizeof($files) > 0) {
+				  foreach($files as $image) {
+					$ext = strtolower(pathinfo($image, PATHINFO_EXTENSION));
+					$line = $this->getMedataData($image);
+					$row['title'] = $line[0]['XMP']['Title'];
+					$row['url'] = "?a=detail&q=".pathinfo($image)['filename'].".".$ext."&t=".$line[0]['XMP']['Title'];
+					$res[] = $row;
+				  }
+				  $this->setResponse(200,"Opération terminée avec succès !",$res);
+			  } else
+					$this->setResponse(400,"Erreur survenue aucours de la récupération des données ! ",$res);
+					
+			$this->sendResponse();
+		  }
 	  }
 	 /**
 	  * Permet de construire la réponse à renvoyer au client
