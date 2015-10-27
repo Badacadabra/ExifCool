@@ -10,6 +10,7 @@ L.tileLayer('https://api.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token
 $.get('?a=ajaxMap').done(function(res) {
 		console.log(res.data);
 		if (res.code == 200) {
+			 $( ".ui.active.page.dimmer" ).hide();
 			if (res.data.length > 0) {
 				var markers = res.data.markers;
 				for (i in markers) {
@@ -17,15 +18,5 @@ $.get('?a=ajaxMap').done(function(res) {
 					marker.bindPopup("<img src=\"" + markers[i].image + "\">");
 				}
 			} else {
-				alert("Aucune image n'est disponible pour affichage");
-			}
-		} else
-			alert(res.message);return false;
+				alert("Aucune image disponible pour affichage");
 });
-	
-//~ var data = {
-	//~ markers: [
-		//~ { "latitude":60.1756, "longitude":24.9342, "image":"../ui/images/baptiste-vannesson.jpg" },
-		//~ { "latitude":48.8534100, "longitude":2.3488000, "image":"../ui/images/macky-dieng.jpg" },
-	//~ ]
-//~ }

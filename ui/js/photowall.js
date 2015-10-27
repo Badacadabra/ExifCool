@@ -1,9 +1,4 @@
 PhotoWall = {
-	
-	/**
-	 * Initialisation des variables et fonctions
-	 * **/
-	
 	/**
 	 * Configuration du photowall
 	 * */
@@ -24,12 +19,12 @@ PhotoWall = {
 			}
 			w.onmessage = function(event) {
 				res = event.data;
-                $( "#photowall" ).removeClass( "ui active dimmer" );
-                $( "#main-loader" ).hide();
-				if (res.code == 200)
-					PhotoWall.config(res.data);
-				else
-					alert(res.message);
+                if (res.code == 200) {
+                    $( ".ui.active.page.dimmer" ).hide();
+                    PhotoWall.config(res.data);
+                }
+                else
+                    alert(res.message);
 			};
 		} else {
 			console.log("Nous sommes désolés. Les web workers ne sont pas gérés par votre navigateur.");
@@ -40,7 +35,6 @@ PhotoWall = {
 		w.terminate();
 		w = undefined;
 	}
-	
 }
 $( document ).ready(function() {
 	PhotoWall.startWorker();

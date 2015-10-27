@@ -8,6 +8,7 @@
                 </div>
                 <div class="ui divider"></div>
                 <div id="upload-wrapper">
+                    <!-- Formulaire -->
                     <div id="form-wrapper" class="ui large form">
                         <div id="upload-loader" class="ui icon message">
                             <i class="notched circle loading icon"></i>
@@ -27,13 +28,15 @@
                                 <p>Vous devez cliquer sur « Sauvegarder » pour uploader votre image.</p>
                             </div>
                         </div>
-                        <div class="field">
+                        <div id="title-field" class="field">
                             <label>Titre</label>
-                            <input type="text" placeholder="Titre" id="title">
+                            <input type="text" placeholder="Titre" id="title" name="title">
+                            <div id="title-error" class="ui basic red pointing prompt label transition" style="display: none;">Vous devez entrer un titre.</div>
                         </div>
-                        <div class="field">
+                        <div id="author-field" class="field">
                             <label>Auteur</label>
-                            <input type="text" placeholder="Auteur" id="author">
+                            <input type="text" placeholder="Auteur" id="author" name="author">
+                            <div id="author-error" class="ui basic red pointing prompt label transition" style="display: none;">Vous devez entrer un auteur.</div>
                         </div>
                         <div class="field">
                             <label>URL de l'auteur</label>
@@ -77,13 +80,14 @@
                             <label>Description</label>
                             <textarea id="desc" placeholder="Description" ></textarea>
                         </div>
-                        <button class="ui primary big button" id="save">
+                        <button type="submit" class="ui primary big button" id="save">
                             Sauvegarder
                         </button>
                         <button class="ui red big button" id="cancel">
                             Annuler
                         </button>
                     </div>
+                    <!-- Pop-ups -->
                     <div id="confirm-upload" class="ui basic modal">
                         <div class="ui icon header">
                             Souhaitez-vous ajouter une autre image ?
@@ -102,6 +106,7 @@
                             <div class="ui massive green ok inverted button">Oui</div>
                         </div>
                     </div>
+                    <!-- Zone de prévisualisation -->
                     <div id="selected-image">
                         <img src="ui/images/default_image.png" alt="" itemprop="primaryImageOfPage">
                     </div>
