@@ -70,19 +70,60 @@
 			  contentType: false 
 			}).success(parseImgInfo);
 	}
+    
+    /***
+     * Validation du formulaire
+     * **/
+    //~ function validateForm() {
+        //~ $('.ui.large.form')
+          //~ .form({
+            //~ fields: {
+              //~ title: {
+                //~ identifier: 'title',
+                //~ rules: [
+                  //~ {
+                    //~ type   : 'empty',
+                    //~ prompt : 'Vous devez entrer un titre.'
+                  //~ }
+                //~ ]
+              //~ }
+            //~ },
+            //~ author: {
+              //~ identifier: 'author',
+              //~ rules: [
+                //~ {
+                  //~ type   : 'empty',
+                  //~ prompt : 'Vous devez entrer un auteur.'
+                //~ }
+              //~ ]
+            //~ }
+          //~ },
+          //~ {
+            //~ onSuccess: sendImgInfo,
+            //~ onFailure: function() {
+                //~ return false;
+            //~ }
+          //~ }
+        //~ );
+    //~ }
+    
 	/**
 	 * Permet d'envoyer les nouvelles données des images
 	 * au serveur.
 	 * **/
 	function sendImgInfo(ev) {
 		
-		if ($("#title").val() == "") {
-				alert("Le titre de l'image est obligatoire");
-				return false;
-		} else if($("#author").val() == "") {
-				alert("L'auteur de l'image est obligatoire");
-				return false;
+		if ($( "#title" ).val() == "") {
+            $( "#form-wrapper" ).addClass( "error" );
+            $( "#title-field" ).addClass( "error" );
+            $( "#title-error" ).fadeIn();
+            $( "html,body" ).mCustomScrollbar("scrollTo", 0);
+            return false;
 		}
+        if ($( "#author" ).val() == "") {
+            $( "#author" ).val( "Inconnu" );
+		}
+        
 		var data = {
 				title : $("#title").val(),
 				author : $("#author").val(),
@@ -114,6 +155,7 @@
           
         ev.preventDefault();
 	}
+    
 	function cancelUploading (ev) {
         $('#cancel-upload').modal({
             onApprove: function () {

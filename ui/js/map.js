@@ -10,6 +10,7 @@ L.tileLayer('https://api.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token
 $.get('?a=ajaxMap').done(function(res) {
 		console.log(res.data);
 		if (res.code == 200) {
+            $( ".ui.active.page.dimmer" ).hide();
 			var markers = res.data.markers;
 			for (i in markers) {
 				var marker = L.marker([markers[i].latitude, markers[i].longitude]).addTo(map);

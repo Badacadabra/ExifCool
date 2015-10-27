@@ -1,22 +1,55 @@
         <section class="ui segment">
-            <div class="ui small basic icon buttons">
-                <a href="<?php echo $res[0]['SourceFile']; ?>" download id="downloadImage" class="ui button" data-content="Télécharger l'image"><i class="download icon"></i></a>
-                <a href="ui/images/photos/xmp/<?php echo pathinfo($res[0]['SourceFile'])['filename'].".xmp"; ?>" download id="downloadXmp" class="ui button" data-content="Télécharger le fichier XMP Sidecar"><i class="file icon"></i></a>
-                <a href="#" id="flickrRequest" class="ui button" data-content="Images similaires sur Flickr"><i class="flickr icon"></i></a>
+            <div id="options">
+                <div class="ui small basic icon buttons">
+                    <a href="<?php echo $res[0]['SourceFile']; ?>" download id="downloadImage" class="ui button" data-content="Télécharger l'image"><i class="download icon"></i></a>
+                    <a href="ui/images/photos/xmp/<?php echo pathinfo($res[0]['SourceFile'])['filename'].".xmp"; ?>" download id="downloadXmp" class="ui button" data-content="Télécharger le fichier XMP Sidecar"><i class="file icon"></i></a>
+                </div>
+                <div id="flickr-request" style="display:inline;">
+                    <div id="flickr-selection" class="ui inline left pointing dropdown">
+                        <div class="text" style="font-size:large;font-weight:bold;margin-left:20px;">
+                            <i class="flickr icon"></i>
+                            Recherches associées sur Flickr
+                        </div>
+                        <i class="dropdown icon"></i>
+                        <div class="menu">
+                            <div class="header" style="font-weight:bold;">Pays</div>
+                            <div class="item"><?php echo $res[0]['XMP']['Country']?></div>
+                            <div class="ui divider"></div>
+                            <div class="header" style="font-weight:bold;">Ville</div>
+                            <div class="item"><?php echo $res[0]['XMP']['City']?></div>
+                            <div class="ui divider"></div>
+                            <div class="header" style="font-weight:bold;">Mots-clés</div>
+                            <?php foreach($res[0]['IPTC']['Keywords'] as $kw) {
+                                echo '<div class="item">'.$kw.'</div>';
+                            }?>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div id="content-wrapper">
-                <a href="<?php echo $res[0]['SourceFile']; ?>" id="image-lightbox" data-lightbox="image" data-title="<?php echo $res[0]['XMP']['Title']; ?>">
-                    <figure id="thumbnail" data-content="Cliquez pour agrandir" data-variation="inverted" data-position="right center">
-                        <img src="<?php echo $res[0]['SourceFile']; ?>" alt="<?php echo pathinfo($res[0]['SourceFile'])['filename']; ?>" itemprop="primaryImageOfPage">
-                        <figcaption><?php echo $res[0]['XMP']['Title']; ?></figcaption>
-                    </figure>
-                </a>
-                <div id="metadata" class="ui styled accordion" itemscope itemtype="https://schema.org/ImageObject">
-                    <div class="active title">
+                <div>
+                    <a href="<?php echo $res[0]['SourceFile']; ?>" id="image-lightbox" data-lightbox="image" data-title="<?php echo $res[0]['XMP']['Title']; ?>">
+                        <figure id="thumbnail" data-content="Cliquez pour agrandir" data-variation="inverted" data-position="right center">
+                            <img src="<?php echo $res[0]['SourceFile']; ?>" alt="<?php echo pathinfo($res[0]['SourceFile'])['filename']; ?>" itemprop="primaryImageOfPage">
+                            <figcaption><?php echo $res[0]['XMP']['Title']; ?></figcaption>
+                        </figure>
+                    </a>
+                    <div id="flickr-loader" class="ui icon message" style="display: none;">
+                        <i class="notched circle loading icon"></i>
+                        <div class="content">
+                            <div class="header">
+                                Un peu de patience !
+                            </div>
+                            <p>Chargement des images en cours...</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="metadata" class="ui fluid styled accordion" itemscope itemtype="https://schema.org/ImageObject">
+                    <div class="title">
                         <i class="dropdown icon"></i>
                         Métadonnées EXIF
                     </div>
-                    <div class="active content">
+                    <div class="content">
                         <?php
                         if (array_key_exists('EXIF',$res[0])) {
                             foreach($res[0]['EXIF'] as $k => $v) {
@@ -89,28 +122,18 @@
                         ?>
                     </div>
                 </div>
-    
-        </div>
-        <div class="ui divider"></div>
-        <div id="flickr">
-            <h2>Recherchez des Images Flickr liées à cette image selon les critères ci-dessous.</h2>
-            <div class="ui left icon input">
-                <select id="imageFlickr" style="width:500px;">
-                    <option selected>------------------------------------------------------</option>
-                    <option value="<?php echo $res[0]['XMP']['Country']?>"><b style="font-weight:bold;">Pays</b> : <?php echo $res[0]['XMP']['Country']?></option>
-                    <option value="<?php echo $res[0]['XMP']['City']?>"><b style="font-weight:bold;">Ville</b> : <?php echo $res[0]['XMP']['City']?></option>
-                    <optgroup label="Mots clés" style="font-weight:bold;">
-                    <?php foreach($res[0]['IPTC']['Keywords'] as $kw) {
-                        echo '<option value="'.$kw.'" style="margin-left:10px;">'.$kw.'</option>';
-                    }?>
-                    </optgroup>
-                </select>
             </div>
             <div id="flickr-response" itemscope itemtype="https://schema.org/ImageGallery"></div>
-        </div>
         </section>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
         <script src="ui/js/lightbox.min.js"></script>
         <script src="ui/js/flickrRequest.js"></script>
         <script src="ui/js/downloadOptn.js"></script>
         <script src="ui/js/initAccordion.js"></script>
+        <script>
+            $( document ).ready(function() {
+                $('.ui.dropdown').dropdown({
+                    onChange: search
+                });
+            });
+        </script>

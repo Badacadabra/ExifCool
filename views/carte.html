@@ -1,6 +1,11 @@
         <section class="ui segment">
             <div id="map" itemscope itemtype="http://schema.org/Map"></div>
         </section>
-        <script src="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.js"></script>
+        <div class="ui active page dimmer">
+            <div class="content">
+                <div id="main-loader" class="ui large indeterminate text loader">Chargement de la carte</div>
+            </div>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
         <script src="ui/js/map.js"></script>

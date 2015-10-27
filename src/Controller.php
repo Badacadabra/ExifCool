@@ -362,7 +362,7 @@ class Controller
 						
 					$data[] = array ('latitude' => $latitude,
 									 'longitude' => $longitude,
-									 'image' => "../ui/images/photos/".pathinfo($image)['basename']
+									 'image' => "../image-gallery-metadata/ui/images/photos/".pathinfo($image)['basename']
 									);
 				}
 			}
