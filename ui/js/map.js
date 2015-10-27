@@ -10,10 +10,14 @@ L.tileLayer('https://api.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token
 $.get('?a=ajaxMap').done(function(res) {
 		console.log(res.data);
 		if (res.code == 200) {
-			var markers = res.data.markers;
-			for (i in markers) {
-				var marker = L.marker([markers[i].latitude, markers[i].longitude]).addTo(map);
-				marker.bindPopup("<img src=\"" + markers[i].image + "\">");
+			if (res.data.length > 0) {
+				var markers = res.data.markers;
+				for (i in markers) {
+					var marker = L.marker([markers[i].latitude, markers[i].longitude]).addTo(map);
+					marker.bindPopup("<img src=\"" + markers[i].image + "\">");
+				}
+			} else {
+				alert("Aucune image n'est disponible pour affichage");
 			}
 		} else
 			alert(res.message);return false;
