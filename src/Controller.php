@@ -38,6 +38,7 @@ class Controller
 							'validateImg' => "validateUploadImgAction",
 							'cancel' => "cancelUploadingAction",
 							'ajaxMap' => "ajaxMapAction",
+							'search' => "searchAction",
 							);
 		$this->action = $action;
 		$this->currentImg = null;
@@ -101,7 +102,7 @@ class Controller
 					$line = $this->getMedataData($image);
 					$row['title'] = $line[0]['XMP']['Title'];
 					$row['subtitle'] = $line[0]['XMP']['Creator'].","." ".$line[0]['XMP']['Country'];
-					$row['url'] = "?a=detail&q=".pathinfo($image)['filename'].".".$ext;
+					$row['url'] = "?a=detail&q=".pathinfo($image)['filename'].".".$ext."&t=".$line[0]['XMP']['Title'];
 					$row['img'] = $image;
 					$res[] = $row;
 				}
@@ -389,6 +390,28 @@ class Controller
 	 {
 		return TemplateRender::render('views/a-propos.html',$res=array());
 	 }
+	 /***
+	  * Action du moteur de recherche
+	  * */
+	  public function searchAction ()
+	  {
+		  $files = glob("ui/images/photos/*.*");
+		  $supported_file = array('gif','jpg','jpeg','png');
+		  $res = array();
+		  if (sizeof($files) > 0) {
+			  foreach($files as $image) {
+				$ext = strtolower(pathinfo($image, PATHINFO_EXTENSION));
+				$line = $this->getMedataData($image);
+				$row['title'] = $line[0]['XMP']['Title'];
+				$row['url'] = "?a=detail&q=".pathinfo($image)['filename'].".".$ext."&t=".$line[0]['XMP']['Title'];
+				$res[] = $row;
+			  }
+			  $this->setResponse(200,"Opération terminée avec succès !",$res);
+		  } else
+				$this->setResponse(400,"Erreur survenue aucours de la récupération des données ! ",$res);
+				
+		 $this->sendResponse();
+	  }
 	 /**
 	  * Permet de construire la réponse à renvoyer au client
 	  * @param int $code : le code de retour

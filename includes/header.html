@@ -2,18 +2,18 @@
 <html lang="fr" prefix="og: http://ogp.me/ns#">
     <head>
         <meta charset="UTF-8">
-        <title>Accueil</title>
-        <meta name="description" content="Une galerie d'images pour le module UMDN3C">
+        <title><?php echo $title; ?></title>
+        <meta name="description" content="<?php echo $meta_description; ?>">
         <meta name="author" content="Macky Dieng, Baptiste Vannesson">
-        <meta property="og:title" content="Galerie d'images">
+        <meta property="og:title" content="<?php echo $meta_title; ?>">
         <meta property="og:type" content="website">
-        <meta property="og:url" content="http://www.domain.com">
+        <meta property="og:url" content="<?php echo $meta_url; ?>">
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:site" content="@Badacadabra">
         <meta name="twitter:creator" content="@dieng445">
-        <meta name="twitter:title" content="Galerie d'images">
-        <meta name="twitter:description" content="Une galerie d'images pour le module UMDN3C">
-        <meta name="twitter:image" content="http://www.domaine.com/ui/images/photographer.jpg">
+        <meta name="twitter:title" content="<?php echo $meta_title; ?>">
+        <meta name="twitter:description" content="<?php echo $meta_description; ?>">
+        <meta name="twitter:image" content="<?php echo $meta_image; ?>">
         <link rel="shortcut icon" type="image/png" href="../ui/images/favicon.png">
         <link rel="stylesheet" href="ui/css/style.css" media="all">
         <link rel="stylesheet" href="ui/semantic/dist/semantic.min.css">

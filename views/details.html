@@ -12,16 +12,25 @@
                         </div>
                         <i class="dropdown icon"></i>
                         <div class="menu">
-                            <div class="header" style="font-weight:bold;">Pays</div>
-                            <div class="item"><?php echo $res[0]['XMP']['Country']?></div>
-                            <div class="ui divider"></div>
-                            <div class="header" style="font-weight:bold;">Ville</div>
-                            <div class="item"><?php echo $res[0]['XMP']['City']?></div>
-                            <div class="ui divider"></div>
-                            <div class="header" style="font-weight:bold;">Mots-clés</div>
-                            <?php foreach($res[0]['IPTC']['Keywords'] as $kw) {
-                                echo '<div class="item">'.$kw.'</div>';
-                            }?>
+							<?php if (array_key_exists('XMP',$res[0])) { ?>
+								<div class="header" style="font-weight:bold;">Pays</div>
+								<div class="item"><?php if ($res[0]['XMP']['Country']!="_none") echo $res[0]['XMP']['Country']; else echo "Non renseigné"; ?></div>
+								<div class="ui divider"></div>
+								<div class="header" style="font-weight:bold;">Ville</div>
+								<div class="item"><?php if ($res[0]['XMP']['City']!="_none") echo $res[0]['XMP']['City']; else echo "Non renseignée";?></div>
+								<div class="ui divider"></div>
+							<?php }
+							 if (array_key_exists('IPTC',$res[0])) {
+							?>
+								<div class="header" style="font-weight:bold;">Mots-clés</div>
+								<?php 
+								if (array_key_exists('Keywords',$res[0]['IPTC'])) {
+									foreach($res[0]['IPTC']['Keywords'] as $kw) {
+										echo '<div class="item">'.$kw.'</div>';
+									}
+								} else
+									echo '<div class="item">Non renseignés</div>';
+							}?>
                         </div>
                     </div>
                 </div>
