@@ -27,12 +27,20 @@ section {
     margin-right: auto !important;
 }
 
+nav.menu {
+    background-color: black !important;
+}
+
 nav.menu a.item {
     width: 150px;
 }
 
-nav.menu {
-    background-color: black !important;
+nav.menu input#term {
+    height: 60px;
+}
+
+nav.menu i.search.icon {
+    margin-top: 20px;
 }
 
 #photowall {
@@ -47,12 +55,6 @@ nav.menu {
 .segment {
     padding: 30px !important;
 }
-
-/* =============================================== */
-/* ================== Accueil ==================== */
-/* =============================================== */
-
-
 
 /* =============================================== */
 /* ================== Détails ==================== */
@@ -71,6 +73,8 @@ a#image-lightbox figure#thumbnail {
 
 a#image-lightbox figure#thumbnail img {
     width: 500px;
+    border: solid 8px black;
+    box-shadow: 7px 7px 5px gray;
 }
 
 a#image-lightbox figure#thumbnail figcaption {
@@ -79,13 +83,17 @@ a#image-lightbox figure#thumbnail figcaption {
     background-color: black;
     font-weight: bold;
     padding: 15px;
+    text-align: center;
     position: absolute;
-    top: 370px;
-    opacity: 0.7;
+    top: 85px;
 }
 
 div#metadata {
     margin: 20px 0 20px 30px;
+}
+
+div#metadata .item .content {
+    padding: 5px 0 !important;
 }
 
 #flickr-loader {
@@ -94,6 +102,24 @@ div#metadata {
 
 #flickr-response {
     margin-top: 20px
+}
+
+@media screen and (max-width: 1400px) {
+
+    div#content-wrapper {
+        flex-direction: column;
+        width: 90%;
+        margin: auto;
+    }
+    
+    div#content-wrapper div#image-wrapper {
+        margin: auto;
+    }
+    
+    div#content-wrapper div#metadata {
+        margin-left: 0;
+    }
+
 }
 
 /* =============================================== */
@@ -122,17 +148,7 @@ div#metadata {
 
 #upload-wrapper {
     display: flex !important;
-    align-items: center !important;
-}
-
-#form-wrapper {
-    display: none;
-    max-width: 45%;
-}
-
-#form-wrapper .ui.huge.input {
-    display: block;
-    margin: 15px 0;
+    align-items: flex-start !important;
 }
 
 #selected-image {
@@ -144,8 +160,55 @@ div#metadata {
     height: 350px;
 }
 
+#form-wrapper {
+    display: none;
+    max-width: 55%;
+}
+
+#form-wrapper .ui.huge.input {
+    display: block;
+    margin: 15px 0;
+}
+
+.ui.yellow.message {
+    margin-top: 0;
+}
+
 div.ui.basic.modal div.ui.icon.header {
     font-size: xx-large;
+}
+
+@media screen and (max-width: 1700px) {
+
+    #selected-image {
+        height: 266px;
+    }
+
+    #selected-image img {
+        height: 250px;
+    }
+
+}
+
+@media screen and (max-width: 1460px) {
+
+    #upload-wrapper {
+        justify-content: space-between;
+    }
+    
+    #selected-image {
+        height: 166px;
+    }
+
+    #selected-image img {
+        height: 150px;
+    }
+    
+    .ui.yellow.message,
+    .notched.circle.loading + div {
+        font-size: 14px !important;
+    }
+
 }
 
 /* =============================================== */

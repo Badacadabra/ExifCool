@@ -1,7 +1,7 @@
 /**
  * Initialisation de la carte
  * */
-var map = L.map('map').setView([48.8534100, 2.3488000], 3);
+var map = L.map('map').setView([48.8534100, 2.3488000], 2);
 L.tileLayer('https://api.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiYmFkYWNhZGFicmEiLCJhIjoiY2lmd243aHNjMDI2enRjbTBiMndsbTMxYyJ9.t6qub-xAwB9RnfP4dE3DXw', {
 	attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
 	minZoom: 2,

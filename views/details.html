@@ -36,7 +36,7 @@
                 </div>
             </div>
             <div id="content-wrapper">
-                <div>
+                <div id="image-wrapper">
                     <a href="<?php echo $res[0]['SourceFile']; ?>" id="image-lightbox" data-lightbox="image" data-title="<?php echo $res[0]['XMP']['Title']; ?>">
                         <figure id="thumbnail" data-content="Cliquez pour agrandir" data-variation="inverted" data-position="right center">
                             <img src="<?php echo $res[0]['SourceFile']; ?>" alt="<?php echo pathinfo($res[0]['SourceFile'])['filename']; ?>" itemprop="primaryImageOfPage">
@@ -101,11 +101,11 @@
 							echo '<div class="item">Aucune données pour cette section</div>';
                         ?>
                     </div>
-                    <div class="title">
+                    <div class="active title">
                         <i class="dropdown icon"></i>
                         Métadonnées IPTC
                     </div>
-                    <div class="content">
+                    <div class="active content">
                         <?php 
                        if (array_key_exists('IPTC',$res[0])) {
                             foreach($res[0]['IPTC'] as $k => $v) {
@@ -141,8 +141,14 @@
         <script src="ui/js/initAccordion.js"></script>
         <script>
             $( document ).ready(function() {
+                
                 $('.ui.dropdown').dropdown({
                     onChange: search
                 });
+                
+                $( "#image-lightbox, #flickr-response" ).click(function() {
+                    $( "html,body" ).mCustomScrollbar("scrollTo", 0);
+                });
+                
             });
         </script>

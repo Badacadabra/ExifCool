@@ -10,23 +10,23 @@ try {
 		$res = $ctrl->dispatch();
 		switch($action) {
 			case "map" : 
-				$title = "La carte";
-				$meta_title = "Visualisation des images sur une carte";
-				$meta_description = "Visualisation des images sur une carte";
+				$title = "Carte";
+				$meta_title = "Carte interactive";
+				$meta_description = "Visualisation d'images sur une carte, à partir des coordonnées GPS fournies dans les métadonnées.";
 				$meta_image = "";
 				$meta_url = $_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
 				break;
 			case "upload":
-				$title = "Ajouter une image";
-				$meta_title = "Ajout des images à l'application";
-				$meta_description = "Plate-forme d'upload d'images sur l'application";
+				$title = "Upload";
+				$meta_title = "Upload d'images";
+				$meta_description = "Uploadez vos images pour en extraire les métadonnées !";
 				$meta_image = "";
 				$meta_url = $_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
 				break;
 			case "about":
 				$title = "À propos";
-				$meta_title = "Fiche technique sur l'implémentation de l'application";
-				$meta_description = "Détail technique de la mise en place de l'application";
+				$meta_title = "À propos de l'application";
+				$meta_description = "Détails techniques sur la mise en place de l'application.";
 				$meta_image = "";
 				$meta_url = $_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
 				break;

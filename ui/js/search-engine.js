@@ -14,7 +14,7 @@ $('.ui.search')
 			// afin qu'elle fontionne avec le search
 			$.each(serverResponse.data, function(index, item) {
 			  var title   = item.title || 'Unknown',
-				  maxResults = 8;
+				  maxResults = 7;
 			  if(index >= maxResults) {
 				return false;
 			  }

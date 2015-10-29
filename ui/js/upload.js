@@ -37,7 +37,7 @@
 		}
         // Ajustements ergonomiques
         $( "#selected-image" ).css({
-            "margin-left" : "150px",
+            "margin-right" : "60px",
             "border" : "solid 8px black",
             "box-shadow" : "7px 7px 5px gray"
         });
@@ -80,42 +80,6 @@
 			  contentType: false 
 			}).success(parseImgInfo);
 	}
-    
-    /***
-     * Validation du formulaire
-     * **/
-    //~ function validateForm() {
-        //~ $('.ui.large.form')
-          //~ .form({
-            //~ fields: {
-              //~ title: {
-                //~ identifier: 'title',
-                //~ rules: [
-                  //~ {
-                    //~ type   : 'empty',
-                    //~ prompt : 'Vous devez entrer un titre.'
-                  //~ }
-                //~ ]
-              //~ }
-            //~ },
-            //~ author: {
-              //~ identifier: 'author',
-              //~ rules: [
-                //~ {
-                  //~ type   : 'empty',
-                  //~ prompt : 'Vous devez entrer un auteur.'
-                //~ }
-              //~ ]
-            //~ }
-          //~ },
-          //~ {
-            //~ onSuccess: sendImgInfo,
-            //~ onFailure: function() {
-                //~ return false;
-            //~ }
-          //~ }
-        //~ );
-    //~ }
     
 	/**
 	 * Permet d'envoyer les nouvelles données des images
