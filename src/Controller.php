@@ -365,7 +365,7 @@ class Controller
 						
 					$data[] = array ('latitude' => $latitude,
 									 'longitude' => $longitude,
-									 'image' => "../ui/images/photos/".pathinfo($image)['basename']
+									 'image' => "ui/images/photos/".pathinfo($image)['basename']
 									);
 				}
 			}
