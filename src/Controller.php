@@ -9,7 +9,7 @@ class Controller
 {
 	/**
 	 * @var $listActions
-	 * Permet de contenir l'ensemble des actions de l'appli
+	 * Permet de contenir l'ensemble des actions de l'application
 	 * */
 	private $listActions;
 	/**
