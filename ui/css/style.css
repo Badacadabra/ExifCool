@@ -132,11 +132,11 @@ div#metadata .item .content {
         width: 90%;
         margin: auto;
     }
-    
+
     div#content-wrapper div#image-wrapper {
         margin: auto;
     }
-    
+
     div#content-wrapper div#metadata {
         margin-left: 0;
     }
@@ -216,7 +216,7 @@ div.ui.basic.modal div.ui.icon.header {
     #upload-wrapper {
         justify-content: space-between;
     }
-    
+
     #selected-image {
         height: 166px;
     }
@@ -224,7 +224,7 @@ div.ui.basic.modal div.ui.icon.header {
     #selected-image img {
         height: 150px;
     }
-    
+
     .ui.yellow.message,
     .notched.circle.loading + div {
         font-size: 14px !important;
@@ -253,6 +253,11 @@ div.ui.basic.modal div.ui.icon.header {
 
 .cards {
     margin-top: 20px !important;
+    margin-left: 22px !important;
+}
+
+.ui.cards > .card {
+    width: 230px !important;
 }
 
 .ui.search > .results {

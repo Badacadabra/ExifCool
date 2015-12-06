@@ -1,5 +1,5 @@
-		<section class="ui segment">
-            <form method="#" action="#" enctype="multipart/form-data" id="upload-form">
+        <section class="ui segment">
+            <form enctype="multipart/form-data" id="upload-form">
                 <div id="file-container">
                     <label for="file" class="ui icon massive button">
                     <i class="photo icon"></i>
@@ -108,6 +108,15 @@
                         <div class="actions">
                             <div class="ui massive red cancel inverted button">Non</div>
                             <div class="ui massive green ok inverted button">Oui</div>
+                        </div>
+                    </div>
+                    <div id="wrong-upload" class="ui basic modal">
+                        <div class="ui icon header">
+                            Ce type de fichier n'est pas pris en charge.<br>
+                            Formats acceptés : JPEG, PNG, GIF.
+                        </div>
+                        <div class="actions">
+                            <div class="ui massive green ok inverted button">OK</div>
                         </div>
                     </div>
                 </div>

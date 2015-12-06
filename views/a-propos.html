@@ -5,7 +5,7 @@
             <div id="a-propos" itemprop="mainContentOfPage">
                 <p>ExifCool est une application web développée par Macky Dieng (dieng444) et Baptiste Vannesson (Badacadabra) dans le cadre du M2-DNR2I à l'université de Caen Normandie. Le but du projet était de concevoir une galerie photo « sémantique » sans utiliser de base de données. Naturellement, cette application s'appuie sur l'excellent programme <a href="http://www.sno.phy.queensu.ca/~phil/exiftool/" target="_blank">ExifTool</a> développé par Phil Harvey.</p>
                 <h2>Présentation fonctionnelle de l'application</h2>
-                <p>En dehors du « À propos » qui reprend ce README à l'identique, ExifCool s'articule autour de quatre pages principales :</p>
+                <p>ExifCool s'articule autour de quatre pages principales :</p>
                 <ul>
                     <li>La page d'accueil qui affiche, sous forme de galerie photo, toutes les images présentes dans le dossier « images/photos » de l'application.</li>
                     <li>La page de détails qui affiche les métadonnées de l'image sélectionnée, et qui propose un téléchargement de cette image, un téléchargement de son fichier XMP Sidecar, et des recherches associées sur Flickr.</li>
@@ -31,7 +31,7 @@
                 <p>Quand l'utilisateur arrive sur la page de détails d'une image, une miniature s'affiche, avec toutes les métadonnées correspondantes (EXIF, XMP, IPTC). Ces métadonnées sont extraites par PHP avec un « exec » sur « exiftool ». Pour des raisons de lisibilité, ces métadonnées sont présentées sont forme d'accordéon. En outre, en cliquant sur une miniature, l'utilisateur peut voir l'image en grand dans une <a href="https://github.com/lokesh/lightbox2/" target="_blank">lightbox</a>.</p>
                 <p>Sur cette page, un petit menu est également disponible. Il permet de télécharger l'image (grâce à la propriété « download » de l'élément « a »), mais également le fichier XMP Sidecar (généré grâce à l'option « -xmp » de l'exécutable « exiftool »). Il est également possible d'envoyer une requête vers l'API de Flickr, en choisissant ses mots-clés dans une liste déroulante. Naturellement, ces mots-clés sont issus des métadonnées de l'image courante, précédemment extraites par PHP via « exiftool ».</p>
                 <h3>Page de cartographie</h3>
-                <p>Comme pour la page d'accueil, l'utilisateur est généralement confronté à un loader lorsqu'il arrive sur la page de cartographie, et c'est là aussi dû à la lourdeur des traitements. Dans un premier temps, pour afficher la carte, nous avons utilisé Leaflet, une bibliothèque JavaScript très populaire qui a d'ailleurs servi à développer la [carte photo de Flickr](https://www.flickr.com/map). En complément, nous avons utilisé <a href="https://www.mapbox.com/" target="_blank">Mapbox</a> pour le design de la carte.</p>
+                <p>Comme pour la page d'accueil, l'utilisateur est généralement confronté à un loader lorsqu'il arrive sur la page de cartographie, et c'est là aussi dû à la lourdeur des traitements. Dans un premier temps, pour afficher la carte, nous avons utilisé Leaflet, une bibliothèque JavaScript très populaire qui a d'ailleurs servi à développer la <a href="https://www.flickr.com/map" target="_blank">carte photo de Flickr</a>. En complément, nous avons utilisé <a href="https://www.mapbox.com/" target="_blank">Mapbox</a> pour le design de la carte.</p>
                 <p>Au chargement de la page, une requête AJAX est envoyée vers un script PHP pour récupérer les métadonnées des images du répertoire « images/photos », en particulier la latitude et la longitude (lorsque les images contiennent bien des métadonnées de géolocalisation). Si la requête est un succès, alors on boucle sur le résultat renvoyé et on construit, selon la syntaxe de Leaflet, les différents marqueurs de la carte en utilisant la latitude et la longitude de chaque image contenant des métadonnées GPS. Il va de soi que le chemin de chaque image est aussi injecté dans la carte, afin que les miniatures soient visibles par un simple clic sur le marqueur correspondant.</p>
                 <h3>Page d'upload</h3>
                 <p>Sur la page d'upload, l'utilisateur a la possibilité d'ajouter n'importe quelle image à l'application. Pour des raisons pratiques, car il s'agit avant tout d'un exercice, il n'y a pas d'espace membre sur ExifCool, et donc aucun contrôle de droits ou d'accès. En revanche, un test est effectué sur le type de fichier pour vérifier qu'il s'agit bien d'une image.</p>
@@ -42,7 +42,7 @@
             <div id="auteurs" class="ui cards">
                 <div class="card" itemprop="author" itemscope itemtype="https://schema.org/Person">
                     <div class="image">
-                        <img src="ui/images/macky-dieng.jpg" itemprop="image">
+                        <img src="ui/images/macky-dieng.jpg" alt="Macky Dieng" itemprop="image">
                     </div>
                     <div class="content">
                         <span class="header">
@@ -62,7 +62,7 @@
                 </div>
                 <div class="card" itemprop="author" itemscope itemtype="https://schema.org/Person">
                     <div class="image">
-                        <img src="ui/images/baptiste-vannesson.jpg" itemprop="image">
+                        <img src="ui/images/baptiste-vannesson.jpg" alt="Baptiste Vannesson" itemprop="image">
                     </div>
                     <div class="content">
                         <span class="header">

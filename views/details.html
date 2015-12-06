@@ -12,25 +12,25 @@
                         </div>
                         <i class="dropdown icon"></i>
                         <div class="menu">
-							<?php if (array_key_exists('XMP',$res[0])) { ?>
-								<div class="header" style="font-weight:bold;">Pays</div>
-								<div class="item"><?php if ($res[0]['XMP']['Country']!="_none") echo $res[0]['XMP']['Country']; else echo "Non renseigné"; ?></div>
-								<div class="ui divider"></div>
-								<div class="header" style="font-weight:bold;">Ville</div>
-								<div class="item"><?php if ($res[0]['XMP']['City']!="_none") echo $res[0]['XMP']['City']; else echo "Non renseignée";?></div>
-								<div class="ui divider"></div>
-							<?php }
-							 if (array_key_exists('IPTC',$res[0])) {
-							?>
-								<div class="header" style="font-weight:bold;">Mots-clés</div>
-								<?php 
-								if (array_key_exists('Keywords',$res[0]['IPTC'])) {
-									foreach($res[0]['IPTC']['Keywords'] as $kw) {
-										echo '<div class="item">'.$kw.'</div>';
-									}
-								} else
-									echo '<div class="item">Non renseignés</div>';
-							}?>
+                            <?php if (array_key_exists('XMP',$res[0])) { ?>
+                                <div class="header" style="font-weight:bold;">Pays</div>
+                                <div class="item"><?php if ($res[0]['XMP']['Country']!="_none") echo $res[0]['XMP']['Country']; else echo "N/A"; ?></div>
+                                <div class="ui divider"></div>
+                                <div class="header" style="font-weight:bold;">Ville</div>
+                                <div class="item"><?php if ($res[0]['XMP']['City']!="_none") echo $res[0]['XMP']['City']; else echo "N/A";?></div>
+                                <div class="ui divider"></div>
+                            <?php }
+                             if (array_key_exists('IPTC',$res[0])) {
+                            ?>
+                                <div class="header" style="font-weight:bold;">Mots-clés</div>
+                                <?php
+                                if (array_key_exists('Keywords',$res[0]['IPTC'])) {
+                                    foreach($res[0]['IPTC']['Keywords'] as $kw) {
+                                        echo '<div class="item">'.$kw.'</div>';
+                                    }
+                                } else
+                                    echo '<div class="item">N/A</div>';
+                            }?>
                         </div>
                     </div>
                 </div>
@@ -38,9 +38,9 @@
             <div id="content-wrapper">
                 <div id="image-wrapper">
                     <a href="<?php echo $res[0]['SourceFile']; ?>" id="image-lightbox" data-lightbox="image" data-title="<?php echo $res[0]['XMP']['Title']; ?>">
-                        <figure id="thumbnail" data-content="Cliquez pour agrandir" data-variation="inverted" data-position="right center">
-                            <img src="<?php echo $res[0]['SourceFile']; ?>" alt="<?php echo pathinfo($res[0]['SourceFile'])['filename']; ?>" itemprop="primaryImageOfPage">
-                            <figcaption><?php echo $res[0]['XMP']['Title']; ?></figcaption>
+                        <figure id="thumbnail" data-content="Cliquez pour agrandir" data-variation="inverted" data-position="right center" itemprop="primaryImageOfPage" itemscope itemtype="https://schema.org/ImageObject">
+                            <img src="<?php echo $res[0]['SourceFile']; ?>" alt="<?php echo pathinfo($res[0]['SourceFile'])['filename']; ?>" itemprop="representativeOfPage">
+                            <figcaption itemprop="caption"><?php echo $res[0]['XMP']['Title']; ?></figcaption>
                         </figure>
                     </a>
                     <div id="flickr-loader" class="ui icon message" style="display: none;">
@@ -63,13 +63,13 @@
                         if (array_key_exists('EXIF',$res[0])) {
                             foreach($res[0]['EXIF'] as $k => $v) {
                                if ($v !="_none") {
-									echo '<div class="item">
-											<div class="content"><b>'.$k.'</b> : <span itemprop="name">'.$v.'</span></div>
-										</div>';
-								}
-                            } 
-						} else
-							echo '<div class="item">Aucune données pour cette section</div>';
+                                    echo '<div class="item">
+                                            <div class="content" itemprop="exifData"><b>'.$k.'</b> : <span>'.$v.'</span></div>
+                                        </div>';
+                                }
+                            }
+                        } else
+                            echo '<div class="item">Aucune donnée pour cette section</div>';
                         ?>
                     </div>
                     <div class="title">
@@ -77,7 +77,7 @@
                         Métadonnées XMP
                     </div>
                     <div class="content">
-                        <?php 
+                        <?php
                         if (array_key_exists('XMP',$res[0])) {
                             foreach($res[0]['XMP'] as $k => $v) {
                                 if ($k =='Subject') {
@@ -86,19 +86,19 @@
                                     foreach($v as $key => $val) {
                                         echo '<li style="margin-left:10px;">'.$val.'</li>';
                                     }
-                                echo 	'</ol>
+                                echo    '</ol>
                                     </li>
                                 </ol>';
                                 }  else {
                                    if ($v !="_none") {
-										echo '<div class="item">
-												<div class="content"><b>'.$k.'</b> : <span itemprop="name">'.$v.'</span></div>
-											</div>';
-									}
+                                        echo '<div class="item">
+                                                <div class="content"><b>'.$k.'</b> : <span>'.$v.'</span></div>
+                                            </div>';
+                                    }
                                 }
                             }
-						 } else
-							echo '<div class="item">Aucune données pour cette section</div>';
+                         } else
+                            echo '<div class="item">Aucune donnée pour cette section</div>';
                         ?>
                     </div>
                     <div class="active title">
@@ -106,7 +106,7 @@
                         Métadonnées IPTC
                     </div>
                     <div class="active content">
-                        <?php 
+                        <?php
                        if (array_key_exists('IPTC',$res[0])) {
                             foreach($res[0]['IPTC'] as $k => $v) {
                                 if ($k =='Keywords') {
@@ -115,19 +115,19 @@
                                     foreach($v as $key => $val) {
                                         echo '<li style="margin-left:10px;">'.$val.'</li>';
                                     }
-                                echo 	'</ol>
+                                echo    '</ol>
                                     </li>
                                 </ol>';
                                 }  else {
-									if ($v !="_none") {
-										echo '<div class="item">
-												<div class="content"><b>'.$k.'</b> : <span itemprop="name">'.$v.'</span></div>
-											</div>';
-									}
+                                    if ($v !="_none") {
+                                        echo '<div class="item">
+                                                <div class="content"><b>'.$k.'</b> : <span>'.$v.'</span></div>
+                                            </div>';
+                                    }
                                 }
                             }
-						 } else
-							echo '<div class="item">Aucune données pour cette section</div>';
+                         } else
+                            echo '<div class="item">Aucune donnée pour cette section</div>';
                         ?>
                     </div>
                 </div>
@@ -141,14 +141,14 @@
         <script src="ui/js/initAccordion.js"></script>
         <script>
             $( document ).ready(function() {
-                
+
                 $('.ui.dropdown').dropdown({
                     onChange: search
                 });
-                
+
                 $( "#image-lightbox, #flickr-response" ).click(function() {
                     $( "html,body" ).mCustomScrollbar("scrollTo", 0);
                 });
-                
+
             });
         </script>

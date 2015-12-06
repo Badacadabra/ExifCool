@@ -3,17 +3,26 @@
     <head>
         <meta charset="UTF-8">
         <title><?php echo $title; ?></title>
+        <!-- Basic metadata -->
         <meta name="description" content="<?php echo $meta_description; ?>">
         <meta name="author" content="Macky Dieng, Baptiste Vannesson">
-        <meta property="og:title" content="<?php echo $meta_title; ?>">
+        <!-- Open Graph -->
+        <meta property="og:locale" content="fr_FR">
         <meta property="og:type" content="website">
-        <meta property="og:url" content="<?php echo $meta_url; ?>">
+        <meta property="og:site_name" content="ExifCool">
+        <meta property="og:title" content="<?php echo $meta_title; ?>">
+        <meta property="og:url" content="https://<?php echo $meta_url; ?>">
+        <meta property="og:description" content="<?php echo $meta_description; ?>">
+        <meta property="og:image" content="https://<?php echo $meta_image; ?>">
+        <!-- Twitter Cards -->
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:site" content="@Badacadabra">
         <meta name="twitter:creator" content="@dieng445">
         <meta name="twitter:title" content="<?php echo $meta_title; ?>">
         <meta name="twitter:description" content="<?php echo $meta_description; ?>">
-        <meta name="twitter:image" content="<?php echo $meta_image; ?>">
+        <meta name="twitter:image" content="https://<?php echo $meta_image; ?>">
+        <meta name="twitter:domain" content="https://21411850.users.info.unicaen.fr">
+        <!-- Style -->
         <link rel="shortcut icon" type="image/png" href="../ui/images/favicon.png">
         <link rel="stylesheet" href="ui/css/style.css" media="all">
         <link rel="stylesheet" href="ui/semantic/dist/semantic.min.css">
@@ -22,28 +31,31 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css" />
     </head>
     <body itemscope itemtype="https://schema.org/WebPage">
-		<nav class="ui labeled icon fixed inverted menu">
-			<a class="item" href="index.php">
-				<i class="home icon"></i>
-				Accueil
-			</a>
-			<a class="item" href="?a=map">
-				<i class="marker icon"></i>
-				Carte
-			</a>
-			<a class="item" href="?a=upload">
-				<i class="cloud upload icon"></i>
-				Upload
-			</a>
-			<a class="item" href="?a=about">
-				<i class="help circle icon"></i>
-				À propos
-			</a>
-			<div class="ui large right item search">
+        <nav class="ui labeled icon fixed inverted menu">
+            <a id="logo" class="item" href="?a=about">
+                ExifCool
+            </a>
+            <a class="item" href="index.php">
+                <i class="home icon"></i>
+                Accueil
+            </a>
+            <a class="item" href="?a=map">
+                <i class="marker icon"></i>
+                Carte
+            </a>
+            <a class="item" href="?a=upload">
+                <i class="cloud upload icon"></i>
+                Upload
+            </a>
+            <a class="item" href="?a=about">
+                <i class="help circle icon"></i>
+                À propos
+            </a>
+            <div class="ui large right item search">
                 <div class="ui inverted transparent input">
                     <input class="prompt" type="text" name="term" id="term" placeholder="Chercher une image...">
                     <i class="search icon"></i>
                 </div>
                 <div class="results"></div>
             </div>
-		</nav>
+        </nav>
