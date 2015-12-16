@@ -19,7 +19,8 @@
                 <p>Dans cette application, nous avons utilisé PHP pour pouvoir manipuler l'exécutable « exiftool » avec un certain confort. Nous voulions initialement programmer l'ensemble du projet en JavaScript, mais nous n'avons pas trouvé de portage réellement complet du « exiftool » que nous connaissons en ligne de commande. Nous avons notamment testé la bibliothèque « <a href="https://github.com/exif-js/exif-js" target="_blank">exif-js</a> » qui, même si elle fonctionne très bien, ne renvoie pas les métadonnées XMP ou encore IPTC (seules les métadonnées EXIF sont extraites). De même, l'intéressante bibliothèque « <a href="https://github.com/nathanpeck/exiftool" target="_blank">exiftool</a> » disponible en Node.js via npm, ne semblait pas aussi complète que l'exécutable.</p>
                 <p>Par ailleurs, nous avons utilisé <a href="http://semantic-ui.com/" target="_blank">Semantic UI</a>, déjà parce que le nom allait bien avec le concept du projet, mais aussi et surtout parce que c'est un framework qui permet de faire des choses propres en un temps raisonnable.</p>
                 <h3>Page d'accueil</h3>
-                <p>Lorsque l'utilisateur arrive sur la page d'accueil, il est généralement confronté à un loader qui le fait patienter quelques instants. Ce temps d'attente est parfaitement normal car, en arrière-plan, il se passe pas mal de choses... Tout d'abord, notre script client en JavaScript fait appel à un web worker qui a pour mission principale de lancer une requête AJAX pour charger les données. Derrière les rideaux, PHP reçoit des instructions en mode asynchrone, fait le listing de toutes les images dans le répertoire « images/photos », puis en extrait les métadonnées utiles (ici le titre et l'auteur de chacune des images dans le répertoire précisé plus haut). Bien sûr, lorsque cette requête aboutit, le web worker en informe le script client avec un « postMessage ». À l'issue de la procédure, un objet JSON spécifique est formé avec les données récupérées pour alimenter le plugin <a href="https://github.com/2CodersTeam/jquery.photocols" target="_blank">Photocols</a> qui permet de présenter les images d'une façon très élégante.</p>
+                <p>Lorsque l'utilisateur arrive sur la page d'accueil, il est généralement confronté à un loader qui le fait patienter quelques instants. Ce temps d'attente est parfaitement normal car, en arrière-plan, il se passe pas mal de choses... Tout d'abord, notre script client en JavaScript fait appel à un web worker qui a pour mission principale de lancer une requête AJAX pour charger les données. Derrière les rideaux, PHP reçoit des instructions en mode asynchrone, fait le listing de toutes les images dans le répertoire « images/photos », puis en extrait les métadonnées utiles (ici le titre et l'auteur de chacune des images dans le répertoire précisé plus haut). Bien sûr, lorsque cette requête aboutit, le web worker en informe le script client avec un « postMessage ». À l'issue de la procédure, un objet JSON spécifique est formé avec les données récupérées pour alimenter le plugin <a href="https://github.com/2CodersTeam/jquery.photocols" target="_blank">Photocols</a> qui permet de présenter les images d'une façon très élégante. Le plugin étant néanmoins contraignant sur le plan de la structure, les métadonnées (microdata) de chaque image devaient être injectées en JavaScript a posteriori. Elles ne sont donc pas directement visibles dans le code source de la page d'accueil mais existent bel et bien dans le DOM.</p>
+                <img src="ui/images/microdata.jpg" alt="Microdata">
                 <p>À propos du web worker, il nous semblait ici judicieux d'effectuer tous ces traitements lourds (non DOM) dans un thread à part ; ceci afin de ne pas saturer le navigateur.</p>
                 <h3>Page de détails</h3>
                 <p>La page de détails d'une image est accessible de plusieurs façons :</p>
@@ -28,7 +29,7 @@
                     <li>En cliquant sur un résultat donné par le moteur de recherche</li>
                     <li>En cliquant sur « Non » dans la pop-up qui s'affiche après avoir uploadé une image (redirection automatique)</li>
                 </ul>
-                <p>Quand l'utilisateur arrive sur la page de détails d'une image, une miniature s'affiche, avec toutes les métadonnées correspondantes (EXIF, XMP, IPTC). Ces métadonnées sont extraites par PHP avec un « exec » sur « exiftool ». Pour des raisons de lisibilité, ces métadonnées sont présentées sont forme d'accordéon. En outre, en cliquant sur une miniature, l'utilisateur peut voir l'image en grand dans une <a href="https://github.com/lokesh/lightbox2/" target="_blank">lightbox</a>.</p>
+                <p>Quand l'utilisateur arrive sur la page de détails d'une image, une miniature s'affiche (dans un élément « figure ») avec sa légende (« figcaption ») et toutes les métadonnées correspondantes (EXIF, XMP, IPTC). Ces métadonnées sont extraites par PHP avec un « exec » sur « exiftool ». Pour des raisons de lisibilité, ces métadonnées sont présentées sont forme d'accordéon. En outre, en cliquant sur une miniature, l'utilisateur peut voir l'image en grand dans une <a href="https://github.com/lokesh/lightbox2/" target="_blank">lightbox</a>.</p>
                 <p>Sur cette page, un petit menu est également disponible. Il permet de télécharger l'image (grâce à la propriété « download » de l'élément « a »), mais également le fichier XMP Sidecar (généré grâce à l'option « -xmp » de l'exécutable « exiftool »). Il est également possible d'envoyer une requête vers l'API de Flickr, en choisissant ses mots-clés dans une liste déroulante. Naturellement, ces mots-clés sont issus des métadonnées de l'image courante, précédemment extraites par PHP via « exiftool ».</p>
                 <h3>Page de cartographie</h3>
                 <p>Comme pour la page d'accueil, l'utilisateur est généralement confronté à un loader lorsqu'il arrive sur la page de cartographie, et c'est là aussi dû à la lourdeur des traitements. Dans un premier temps, pour afficher la carte, nous avons utilisé Leaflet, une bibliothèque JavaScript très populaire qui a d'ailleurs servi à développer la <a href="https://www.flickr.com/map" target="_blank">carte photo de Flickr</a>. En complément, nous avons utilisé <a href="https://www.mapbox.com/" target="_blank">Mapbox</a> pour le design de la carte.</p>
@@ -38,47 +39,50 @@
                 <p>Lorsque l'utilisateur choisit une image à uploader, un formulaire s'affiche ainsi qu'une prévisualisation de l'image. Pour le formulaire, il s'agit simplement d'une div cachée qui se révèle grâce à jQuery. Quant à la prévisualisation, et compte tenu du fait qu'il n'est plus possible de modifier directement un chemin local pour des raisons de sécurité (cf. « fakepath »), il a fallu passer par un objet FileReader fourni par HTML5.</p>
                 <p>On remarquera que le processus d'extraction des métadonnées de l'image sélectionnée se fait au même moment. Là encore, une requête AJAX est envoyée vers un script PHP, et au succès, on préremplit les champs du formulaire afin que l'utilisateur puisse modifier ou valider l'upload plus facilement. À noter que le champ titre est obligatoire pour que notre moteur de recherche serve à quelque chose. Si ce champ n'est pas renseigné, une erreur sera renvoyée, le formulaire ne sera pas validé, et fatalement l'image ne sera pas uploadée.</p>
                 <p>À la fin d'un upload, une pop-up demande à l'utilisateur s'il souhaite uploader une nouvelle image. S'il clique sur « Oui », une redirection JavaScript le ramène à la page d'upload. S'il clique sur « Non », une redirection JavaScript l'envoie sur la page de détails de l'image tout juste uploadée.</p>
-            </div>
-            <div id="auteurs" class="ui cards">
-                <div class="card" itemprop="author" itemscope itemtype="https://schema.org/Person">
-                    <div class="image">
-                        <img src="ui/images/macky-dieng.jpg" alt="Macky Dieng" itemprop="image">
-                    </div>
-                    <div class="content">
-                        <span class="header">
-                            <span itemprop="givenName">Macky</span>
-                            <span itemprop="familyName">Dieng</span>
-                        </span>
-                        <div class="meta">
-                            <span>Développeur back-end</span>
+                <h2>Annexes</h2>
+                <div id="auteurs" class="ui cards">
+                    <div class="card" itemprop="author" itemscope itemtype="https://schema.org/Person">
+                        <div class="image">
+                            <img src="ui/images/macky-dieng.jpg" alt="Macky Dieng" itemprop="image">
+                        </div>
+                        <div class="content">
+                            <span class="header">
+                                <span itemprop="givenName">Macky</span>
+                                <span itemprop="familyName">Dieng</span>
+                            </span>
+                            <div class="meta">
+                                <span>Développeur back-end</span>
+                            </div>
+                        </div>
+                        <div class="extra content">
+                            <a href="https://github.com/dieng444" target="_blank" itemprop="url">
+                                <i class="github icon"></i>
+                                dieng444
+                            </a>
                         </div>
                     </div>
-                    <div class="extra content">
-                        <a href="https://github.com/dieng444" target="_blank" itemprop="url">
-                            <i class="github icon"></i>
-                            dieng444
-                        </a>
-                    </div>
-                </div>
-                <div class="card" itemprop="author" itemscope itemtype="https://schema.org/Person">
-                    <div class="image">
-                        <img src="ui/images/baptiste-vannesson.jpg" alt="Baptiste Vannesson" itemprop="image">
-                    </div>
-                    <div class="content">
-                        <span class="header">
-                            <span itemprop="givenName">Baptiste</span>
-                            <span itemprop="familyName">Vannesson</span>
-                        </span>
-                        <div class="meta">
-                            <span>Développeur front-end</span>
+                    <div class="card" itemprop="author" itemscope itemtype="https://schema.org/Person">
+                        <div class="image">
+                            <img src="ui/images/baptiste-vannesson.jpg" alt="Baptiste Vannesson" itemprop="image">
+                        </div>
+                        <div class="content">
+                            <span class="header">
+                                <span itemprop="givenName">Baptiste</span>
+                                <span itemprop="familyName">Vannesson</span>
+                            </span>
+                            <div class="meta">
+                                <span>Développeur front-end</span>
+                            </div>
+                        </div>
+                        <div class="extra content">
+                            <a href="https://github.com/Badacadabra" target="_blank" itemprop="url">
+                                <i class="github icon"></i>
+                                Badacadabra
+                            </a>
                         </div>
                     </div>
-                    <div class="extra content">
-                        <a href="https://github.com/Badacadabra" target="_blank" itemprop="url">
-                            <i class="github icon"></i>
-                            Badacadabra
-                        </a>
-                    </div>
                 </div>
+                <img src="ui/images/open-graph.jpg" alt="Exemple de rendu &laquo; Open Graph &raquo;">
+                <img src="ui/images/twitter-card.jpg" alt="Exemple de rendu &laquo; Twitter Cards &raquo;">
             </div>
         </section>

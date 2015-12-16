@@ -26,7 +26,9 @@ Par ailleurs, nous avons utilisé [Semantic UI](http://semantic-ui.com/), déjà
 
 ### Page d'accueil
 
-Lorsque l'utilisateur arrive sur la page d'accueil, il est généralement confronté à un loader qui le fait patienter quelques instants. Ce temps d'attente est parfaitement normal car, en arrière-plan, il se passe pas mal de choses... Tout d'abord, notre script client en JavaScript fait appel à un web worker qui a pour mission principale de lancer une requête AJAX pour charger les données. Derrière les rideaux, PHP reçoit des instructions en mode asynchrone, fait le listing de toutes les images dans le répertoire « images/photos », puis en extrait les métadonnées utiles (ici le titre et l'auteur de chacune des images dans le répertoire précisé plus haut). Bien sûr, lorsque cette requête aboutit, le web worker en informe le script client avec un « postMessage ». À l'issue de la procédure, un objet JSON spécifique est formé avec les données récupérées pour alimenter le plugin [Photocols](https://github.com/2CodersTeam/jquery.photocols) qui permet de présenter les images d'une façon très élégante.
+Lorsque l'utilisateur arrive sur la page d'accueil, il est généralement confronté à un loader qui le fait patienter quelques instants. Ce temps d'attente est parfaitement normal car, en arrière-plan, il se passe pas mal de choses... Tout d'abord, notre script client en JavaScript fait appel à un web worker qui a pour mission principale de lancer une requête AJAX pour charger les données. Derrière les rideaux, PHP reçoit des instructions en mode asynchrone, fait le listing de toutes les images dans le répertoire « images/photos », puis en extrait les métadonnées utiles (ici le titre et l'auteur de chacune des images dans le répertoire précisé plus haut). Bien sûr, lorsque cette requête aboutit, le web worker en informe le script client avec un « postMessage ». À l'issue de la procédure, un objet JSON spécifique est formé avec les données récupérées pour alimenter le plugin [Photocols](https://github.com/2CodersTeam/jquery.photocols) qui permet de présenter les images d'une façon très élégante. Le plugin étant néanmoins contraignant sur le plan de la structure, les métadonnées (microdata) de chaque image devaient être injectées en JavaScript a posteriori. Elles ne sont donc pas directement visibles dans le code source de la page d'accueil mais existent bel et bien dans le DOM.
+
+![Microdata pour la page d'accueil](https://21411850.users.info.unicaen.fr/ExifCool/ui/images/microdata.jpg)
 
 À propos du web worker, il nous semblait ici judicieux d'effectuer tous ces traitements lourds (non DOM) dans un thread à part ; ceci afin de ne pas saturer le navigateur.
 
@@ -38,7 +40,7 @@ La page de détails d'une image est accessible de plusieurs façons :
 * En cliquant sur un résultat donné par le moteur de recherche
 * En cliquant sur « Non » dans la pop-up qui s'affiche après avoir uploadé une image (redirection automatique)
 
-Quand l'utilisateur arrive sur la page de détails d'une image, une miniature s'affiche, avec toutes les métadonnées correspondantes (EXIF, XMP, IPTC). Ces métadonnées sont extraites par PHP avec un « exec » sur « exiftool ». Pour des raisons de lisibilité, ces métadonnées sont présentées sont forme d'accordéon. En outre, en cliquant sur une miniature, l'utilisateur peut voir l'image en grand dans une [lightbox](https://github.com/lokesh/lightbox2/).
+Quand l'utilisateur arrive sur la page de détails d'une image, une miniature s'affiche (dans un élément « figure ») avec sa légende (« figcaption ») et toutes les métadonnées correspondantes (EXIF, XMP, IPTC). Ces métadonnées sont extraites par PHP avec un « exec » sur « exiftool ». Pour des raisons de lisibilité, ces métadonnées sont présentées sont forme d'accordéon. En outre, en cliquant sur une miniature, l'utilisateur peut voir l'image en grand dans une [lightbox](https://github.com/lokesh/lightbox2/).
 
 Sur cette page, un petit menu est également disponible. Il permet de télécharger l'image (grâce à la propriété « download » de l'élément « a »), mais également le fichier XMP Sidecar (généré grâce à l'option « -xmp » de l'exécutable « exiftool »). Il est également possible d'envoyer une requête vers l'API de Flickr, en choisissant ses mots-clés dans une liste déroulante. Naturellement, ces mots-clés sont issus des métadonnées de l'image courante, précédemment extraites par PHP via « exiftool ».
 
@@ -57,3 +59,9 @@ Lorsque l'utilisateur choisit une image à uploader, un formulaire s'affiche ain
 On remarquera que le processus d'extraction des métadonnées de l'image sélectionnée se fait au même moment. Là encore, une requête AJAX est envoyée vers un script PHP, et au succès, on préremplit les champs du formulaire afin que l'utilisateur puisse modifier ou valider l'upload plus facilement. À noter que le champ titre est obligatoire pour que notre moteur de recherche serve à quelque chose. Si ce champ n'est pas renseigné, une erreur sera renvoyée, le formulaire ne sera pas validé, et fatalement l'image ne sera pas uploadée.
 
 À la fin d'un upload, une pop-up demande à l'utilisateur s'il souhaite uploader une nouvelle image. S'il clique sur « Oui », une redirection JavaScript le ramène à la page d'upload. S'il clique sur « Non », une redirection JavaScript l'envoie sur la page de détails de l'image tout juste uploadée.
+
+## Annexes
+
+![Exemple de rendu « Open Graph »](https://21411850.users.info.unicaen.fr/ExifCool/ui/images/open-graph.jpg)
+
+![Exemple de rendu « Twitter Cards »](https://21411850.users.info.unicaen.fr/ExifCool/ui/images/twitter-card.jpg)

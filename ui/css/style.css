@@ -252,8 +252,7 @@ div.ui.basic.modal div.ui.icon.header {
 }
 
 .cards {
-    margin-top: 20px !important;
-    margin-left: 22px !important;
+    margin: 20px 0 !important;
 }
 
 .ui.cards > .card {
