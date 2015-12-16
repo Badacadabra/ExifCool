@@ -28,7 +28,7 @@ class Controller
 	public function __construct($action=null)
 	{
 		$this->listActions = array (
-							'home' => 'homeAction', 
+							'home' => 'homeAction',
 							'detail' => "detailAction",
 							'map' => "mapAction",
 							'about' => "aboutAction",
@@ -56,14 +56,14 @@ class Controller
 					return $this->$action();
 				} else
 					throw new Exception("Impossible d'exécuter l'action, paramètre erroné.");
-			} else 
+			} else
 				throw new Exception("Action non existante");
-		} else 
+		} else
 			return $this->homeAction();
 	}
 	/**
 	 * Renvoie les métadonnées d'une image donnée
-	 * @param $image : l'image 
+	 * @param $image : l'image
 	 * @return json
 	 * **/
 	public function getMedataData($image)
@@ -72,7 +72,21 @@ class Controller
 			$data = array();
 			exec("exiftool -g0 -json {$image}", $data);
 			return (json_decode(implode($data),true));
-		 } else 
+		 } else
+			 throw new Exception("Image introuvable, vérifier bien la valeur du paramètre <b>q</b>");
+	}
+    /**
+	 * Renvoie les métadonnées d'une image donnée
+	 * @param $image : l'image
+	 * @return json
+	 * **/
+	public function getImageTitle($image)
+	{
+		if (file_exists($image)) {
+			$data = array();
+			exec("exiftool -xmp:Title -json {$image}", $data);
+			return json_decode(implode($data),true);
+		 } else
 			 throw new Exception("Image introuvable, vérifier bien la valeur du paramètre <b>q</b>");
 	}
 	/**
@@ -81,6 +95,7 @@ class Controller
 	 * */
 	 public function homeAction()
 	 {
+
 		return TemplateRender::render('views/index.html',$res=array());
 	 }
 	 /**
@@ -110,7 +125,7 @@ class Controller
 			$this->setResponse(200,"Opération terminée avec succès !",$res);
 		} else
 			$this->setResponse(400,"Erreur survenue lors du chargement des images !");
-			
+
 		$this->sendResponse();
 	 }
 	 /**
@@ -153,19 +168,19 @@ class Controller
 			$row = $this->getMedataData($image);
 			$res = array();
 			$title = null;
-			$author = null; 
+			$author = null;
 			$right = null;
 			$createDate = null;
-			$city = null; 
-			$desc = null; 
+			$city = null;
+			$desc = null;
 			$country = null;
-			$headline = null; 
-			$creatorWorkURL = null; 
+			$headline = null;
+			$creatorWorkURL = null;
 			$usageTerms = null;
 			$source = null;
 			$credit = null;
-			
-			
+
+
 			if (array_key_exists('XMP',$row[0]) || array_key_exists('IPTC',$row[0])) {
 				if (array_key_exists('Title',$row[0]['XMP']))
 					$title = $row[0]['XMP']['Title'];
@@ -252,15 +267,15 @@ class Controller
 			$res['usageTerms'] = $usageTerms;
 			$res['source'] = $source;
 			$res['credit'] = $credit;
-			
+
 			$this->setResponse(200,"Opération terminée avec succès !",$res);
 		} else
 			$this->setResponse(400,"Erreur survenue lors du téléchargement, aucune image reçue !");
-			
+
 		$this->sendResponse();
 	 }
 	 /**
-	 * Permet de valider les métadonnées de l'image 
+	 * Permet de valider les métadonnées de l'image
 	 * télécharger.
 	 * @return Response
 	 * */
@@ -284,7 +299,7 @@ class Controller
 				$usageTerms = !empty($_POST['usageTerms']) ? $_POST['usageTerms'] : "_none";
 				$credit = !empty($_POST['credit']) ? $_POST['credit'] : "_none";
 				$source = !empty($_POST['source']) ? $_POST['source'] : "_none";
-				
+
 				$data = array(array("SourceFile" => $image,
 										"XMP:Title" => $_POST['title'],
 										"XMP:Rights" => $right,
@@ -310,7 +325,7 @@ class Controller
 				$this->setResponse(400,"Erreur survenue lors de la validation, aucune image reçue");
 		 } else
 			 $this->setResponse(400,"Erreur survenue lors de la validation, aucune image reçue");
-		
+
 		$this->sendResponse();
 	 }
 	 /**
@@ -324,7 +339,7 @@ class Controller
 			}
 		   else
 				$this->setResponse(200,"Erreur survenue lors de l'annulation !");
-				
+
 		$this->sendResponse();
 	  }
 	 /**
@@ -339,22 +354,22 @@ class Controller
 			foreach($files as $image)
 			{
 				$line = $this->getMedataData($image);
-				if (array_key_exists('GPSLatitude',$line[0]['Composite']) 
+				if (array_key_exists('GPSLatitude',$line[0]['Composite'])
 					&& array_key_exists('GPSLongitude',$line[0]['Composite'])) {
-					$gpsLat = $line[0]['Composite']['GPSLatitude'];
-					$gpsLong = $line[0]['Composite']['GPSLongitude'];
-					//Les différentes parties de la latitude
-					
-					$longCardinate = substr($gpsLong,18,1);
-					$latCardinate = substr($gpsLat,18,1);
+					$gpsLat = explode(" ",$line[0]['Composite']['GPSLatitude']);
+					$gpsLong = explode(" ",$line[0]['Composite']['GPSLongitude']);
 
-					$latDegree = (int) substr($gpsLat,0,2);
-					$latMinute = (int) substr($gpsLat,7,2);
-					$latSeconds = (float) substr($gpsLat,11,5);
+
+					$longCardinate = $gpsLong[sizeof($gpsLong) - 1];
+					$latCardinate = $gpsLat[sizeof($gpsLat) - 1];
+					//Les différentes parties de la latitude
+                    $latDegree = (int) $gpsLat[0];
+					$latMinute = (int) str_replace("'","",$gpsLat[2]);
+					$latSeconds = (float) str_replace("\"","",$gpsLat[3]);
 					//Les différentes parties de la longitude
-					$longDegree = (int) substr($gpsLong,0,2);
-					$longMinute = (int) substr($gpsLong,7,2);
-					$longSeconds = (float) substr($gpsLong,11,5);
+					$longDegree = (int) $gpsLong[0];
+					$longMinute = (int) str_replace("'","",$gpsLong[2]);
+					$longSeconds = (float) str_replace("'","",$gpsLong[3]);
 					//Decimal value = Degrees + (Minutes/60) + (Seconds/3600)
 					$latitude = round($latDegree + ($latMinute/60) + ($latSeconds/3600),6);
 					$longitude = round($longDegree + ($longMinute/60) + ($longSeconds/3600),6);
@@ -362,7 +377,7 @@ class Controller
 						$latitude = -$latitude;
 					if ($longCardinate == "W")
 						$longitude = -$longitude;
-						
+
 					$data[] = array ('latitude' => $latitude,
 									 'longitude' => $longitude,
 									 'image' => "ui/images/photos/".pathinfo($image)['basename']
@@ -370,11 +385,11 @@ class Controller
 				}
 			}
 			$res['markers'] = $data;
-			
+
 			$this->setResponse(200,"Opération terminée avec succès !",$res);
 		} else
 			$this->setResponse(400,"Aucune image trouvée!",$res);
-		
+
 		$this->sendResponse();
 	 }
 	 /**
@@ -398,21 +413,24 @@ class Controller
 	  public function searchAction ()
 	  {
 		  if (isset($_GET['q']) && !empty($_GET['q'])) {
-			  $files = glob("ui/images/photos/*".$_GET['q']."*.*",GLOB_BRACE);
+              $files = glob("ui/images/photos/*.*");
 			  $supported_file = array('gif','jpg','jpeg','png');
 			  $res = array();
 			  if (sizeof($files) > 0) {
-				  foreach($files as $image) {
-					$ext = strtolower(pathinfo($image, PATHINFO_EXTENSION));
-					$line = $this->getMedataData($image);
-					$row['title'] = $line[0]['XMP']['Title'];
-					$row['url'] = "?a=detail&q=".pathinfo($image)['filename'].".".$ext."&t=".$line[0]['XMP']['Title'];
-					$res[] = $row;
-				  }
+                    foreach($files as $image) {
+                        $ext = strtolower(pathinfo($image, PATHINFO_EXTENSION));
+                        $line = $this->getImageTitle($image);
+                        $title = $line[0]['Title'];
+                        if (strstr(strtolower($title),strtolower($_GET['q']))) {
+                            $row['title'] = $line[0]['Title'];
+                            $row['url'] = "?a=detail&q=".pathinfo($image)['filename'].".".$ext."&t=".$line[0]['Title'];
+                            $res[] = $row;
+                        }
+                    }
 				  $this->setResponse(200,"Opération terminée avec succès !",$res);
 			  } else
 					$this->setResponse(400,"Erreur survenue aucours de la récupération des données ! ",$res);
-					
+
 			$this->sendResponse();
 		  }
 	  }
@@ -422,7 +440,7 @@ class Controller
 	  * @param string $message : le message de retour associé au code
 	  * @param string $data : les données à renvoyer
 	  * @return void
-	  ***/ 
+	  ***/
 	  public function setResponse($code,$message,$data="")
 	  {
 		  $this->response['code'] = $code;
@@ -433,7 +451,7 @@ class Controller
 	  * Permet de renvoyer la réponse au client
 	  * @param string $type : le type de retour
 	  * @return mixed
-	  ***/ 
+	  ***/
 	  public function sendResponse($type='json')
 	  {
 			header("Content-Type: application/{$type}");
@@ -441,6 +459,6 @@ class Controller
 				echo json_encode($this->response);die;
 			} else
 				echo $this->response;die;
-				  
+
 	  }
 }
