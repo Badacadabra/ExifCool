@@ -2,6 +2,7 @@
 $('.ui.search')
 	.search({
 		maxResults: 10,
+        minCharacters : 3,
 		type : 'category',
 		apiSettings : {
 		  url: '?a=search&q={query}',

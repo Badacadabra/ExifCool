@@ -31,5 +31,7 @@ var parseFlickr = function(response) {
 var animations = function() {
     $( "#metadata .active.title, #metadata .active.content" ).removeClass( "active ");
     $( "#flickr-loader" ).fadeOut();
-    $( "html,body" ).mCustomScrollbar("scrollTo", $( "#flickr-response" ));
+    $( "body" ).mCustomScrollbar( "scrollTo", $( "#flickr-response" ), {
+        timeout:500
+    });
 }
